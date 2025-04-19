@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ello Leilões - Login e Cadastro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+    :root {
+      --primary-color: #f26522;
+      --primary-gradient: linear-gradient(135deg, #f26522, #ff8f59);
+      --secondary-color: #2c3e50;
+      --secondary-gradient: linear-gradient(135deg, #2c3e50, #4a6b8a);
+      --accent-color: #e74c3c;
+      --accent-gradient: linear-gradient(135deg, #e74c3c, #ff6b6b);
+      --light-gray: #f8f9fa;
+      --dark-gray: #343a40;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #c0392b;
+      --text-color: #333;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      background-color: #f9f9f9;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animações Globais */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Header e Navegação */
+    .top-bar {
+      background: var(--primary-gradient);
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(242, 101, 34, 0.2);
+      position: relative;
+      z-index: 1000;
+    }
+
+    .top-bar .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-bar .brand-name {
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+    }
+
+    .top-bar .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .top-bar .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding: 5px 0;
+      transition: var(--transition);
+    }
+
+    .top-bar .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: white;
+      transition: var(--transition);
+    }
+
+    .top-bar .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      background: var(--secondary-gradient);
+      color: white;
+      padding: 80px 0;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-text {
+      max-width: 600px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn-hero {
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(242, 101, 34, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .hero-image {
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.2));
+    }
+
+    .hero-shape {
+      position: absolute;
+      z-index: 1;
+    }
+
+    .hero-shape-1 {
+      top: -50px;
+      right: 10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .hero-shape-2 {
+      bottom: -100px;
+      left: 5%;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .hero-shape-3 {
+      top: 30%;
+      left: 15%;
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      margin-top: -100px;
+      z-index: 10;
+      padding: 0 30px;
+    }
+
+    .auth-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      display: flex;
+      min-height: 600px;
+    }
+
+    .auth-sidebar {
+      flex: 1;
+      background: var(--primary-gradient);
+      color: white;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-sidebar-content {
+      position: relative;
+      z-index: 2;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .auth-sidebar-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .auth-sidebar-text {
+      margin-bottom: 30px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .auth-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .auth-feature {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      animation: slideInLeft 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .auth-feature:nth-child(1) { animation-delay: 0.2s; }
+    .auth-feature:nth-child(2) { animation-delay: 0.4s; }
+    .auth-feature:nth-child(3) { animation-delay: 0.6s; }
+    .auth-feature:nth-child(4) { animation-delay: 0.8s; }
+
+    .auth-feature-icon {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .auth-feature-text {
+      font-weight: 500;
+    }
+
+    .auth-sidebar-shape {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .auth-sidebar-shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: -150px;
+    }
+
+    .auth-sidebar-shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: -100px;
+    }
+
+    .auth-forms-container {
+      flex: 1;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 30px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background-color: var(--light-gray);
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      position: relative;
+      z-index: 2;
+    }
+
+    .auth-tab.active {
+      color: white;
+    }
+
+    .auth-tab-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .auth-forms {
+      position: relative;
+      overflow: hidden;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .auth-form {
+      position: relative;
+      width: 100%;
+      height: auto;
+      transition: var(--transition);
+      padding: 20px 0;
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .form-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: var(--secondary-color);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: block;
+      color: var(--secondary-color);
+      transition: var(--transition);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      font-size: 1rem;
+      background-color: #fff;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(242, 101, 34, 0.1);
+      outline: none;
+    }
+
+    .form-control:focus + .form-icon {
+      color: var(--primary-color);
+    }
+
+    .form-icon {
+      position: absolute;
+      right: 15px;
+      top: 48px;
+      color: #aaa;
+      transition: var(--transition);
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: var(--border-radius);
+      background: var(--primary-gradient);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 10px;
+    }
+
+    .btn-auth:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(242, 101, 34, 0.2);
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+    }
+
+    .form-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Partners Section */
+    .partners-section {
+      padding: 80px 0;
+      background-color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+      position: relative;
+      font-weight: 700;
+      color: var(--secondary-color);
+      font-size: 2.2rem;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+
+    .partners-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+    }
+
+    .partner-card {
+      position: relative;
+      background-color: white;
+      border-radius: var(--border-radius);
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+    }
+
+    .partner-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-gradient);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 1;
+    }
+
+    .partner-card:hover::before {
+      opacity: 0.9;
+    }
+
+    .partner-logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+      transition: var(--transition);
+      position: relative;
+      z-index: 2;
+    }
+
+    .partner-card:hover .partner-logo {
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .partner-info {
+      position: absolute;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      padding: 15px;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      transition: var(--transition);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    .partner-card:hover .partner-info {
+      bottom: 0;
+    }
+
+    /* Floating Elements */
+    .floating-element {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .floating-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: 10%;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .floating-2 {
+      width: 200px;
+      height: 200px;
+      bottom: 50px;
+      left: 5%;
+      animation: float 12s ease-in-out infinite reverse;
+    }
+
+    /* Empresa Section */
+    .empresa-section {
+      padding: 80px 0;
+      background-color: var(--light-gray);
+    }
+
+    .empresa-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 30px;
+    }
+
+    .empresa-content {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .empresa-image {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .empresa-image img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    .empresa-info {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .empresa-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
+    }
+
+    .empresa-description {
+      margin-bottom: 30px;
+      line-height: 1.8;
+      color: #555;
+    }
+
+    .empresa-address {
+      background-color: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .empresa-address-title {
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    .empresa-address-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .empresa-address-icon {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+      margin-top: 3px;
+    }
+
+    .empresa-address-text {
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--secondary-gradient);
+      color: white;
+      padding: 60px 0 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    .footer-column {
+      animation: fadeIn 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .footer-column:nth-child(1) { animation-delay: 0.1s; }
+    .footer-column:nth-child(2) { animation-delay: 0.2s; }
+    .footer-column:nth-child(3) { animation-delay: 0.3s; }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo-text {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .footer-description {
+      margin-bottom: 25px;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+
+    .footer-title {
+      font-weight: 700;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-link {
+      margin-bottom: 12px;
+    }
+
+    .footer-link a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-link a:hover {
+      color: white;
+      transform: translateX(5px);
+    }
+
+    .footer-link i {
+      font-size: 0.8rem;
+    }
+
+    .footer-contact {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .footer-contact-icon {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    .footer-contact-text {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+
+    .footer-bottom {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-copyright {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-bottom-link {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .footer-bottom-link:hover {
+      color: white;
+    }
+
+    .footer-shape {
+      position: absolute;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .footer-shape-1 {
+      width: 400px;
+      height: 400px;
+      top: -200px;
+      right: -100px;
+    }
+
+    .footer-shape-2 {
+      width: 300px;
+      height: 300px;
+      bottom: -150px;
+      left: 5%;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1200px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .partners-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 992px) {
+      .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+      }
+      
+      .hero-buttons {
+        justify-content: center;
+      }
+      
+      .auth-container {
+        flex-direction: column;
+      }
+      
+      .auth-sidebar {
+        padding: 30px;
+      }
+      
+      .auth-forms-container {
+        padding: 30px;
+      }
+      
+      .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-bar {
+        padding: 15px;
+      }
+      
+      .top-bar .nav-links {
+        display: none;
+      }
+      
+      .hero-section {
+        padding: 60px 0;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .main-content {
+        margin-top: -50px;
+        padding: 0 15px;
+      }
+      
+      .auth-sidebar-title {
+        font-size: 1.5rem;
+      }
+      
+      .form-title {
+        font-size: 1.5rem;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-bottom-links {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-buttons {
+        flex-direction: column;
+      }
+      
+      .auth-tabs {
+        flex-direction: column;
+      }
+      
+      .auth-tab-slider {
+        width: 100%;
+        height: 50%;
+      }
+      
+      .partners-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animações e Efeitos Especiais */
+    .glow-effect {
+      position: relative;
+    }
+
+    .glow-effect::after {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      background: radial-gradient(circle, rgba(242, 101, 34, 0.3) 0%, rgba(242, 101, 34, 0) 70%);
+      z-index: -1;
+      border-radius: 50%;
+      animation: pulse 3s infinite;
+    }
+
+    .rotate-animation {
+      animation: rotate 20s linear infinite;
+    }
+
+    .gradient-text {
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+  </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+    .error-message {
+      color: var(--danger-color);
+      background-color: rgba(231, 76, 60, 0.1);
+      padding: 10px;
+      border-radius: var(--border-radius);
+      margin-bottom: 15px;
+      display: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<!-- Barra Superior -->
+<div class="top-bar">
+<div class="brand">
+<div class="brand-name">ELLO LEILÕES</div>
+</div>
+<div class="nav-links">
+<a class="nav-link" href="#">Início</a>
+<a class="nav-link" href="#">Leilões</a>
+<a class="nav-link" href="#">Como Funciona</a>
+<a class="nav-link" href="#">Contato</a>
+</div>
+</div>
+<!-- Hero Section -->
+<section class="hero-section">
+<div class="hero-content">
+<div class="hero-text">
+<h1 class="hero-title">Bem-vindo à <span class="gradient-text">Ello Leilões</span></h1>
+<p class="hero-subtitle">Especialistas em leilões para empreendedores do ramo e pessoas físicas. Oferecemos leilões exclusivos de veículos, eletrônicos e muito mais.</p>
+<div class="hero-buttons">
+<a class="btn-hero btn-primary" href="#" onclick="scrollToAuth()">
+<i class="fas fa-user-plus"></i>
+            Criar Conta
+          </a>
+<a class="btn-hero btn-outline" href="#" onclick="scrollToPartners()">
+<i class="fas fa-handshake"></i>
+            Cooperativas Parceiras
+          </a>
+</div>
+</div>
+<div class="hero-image">
+<img alt="Ello Leilões" src="https://via.placeholder.com/500x400/2c3e50/ffffff?text=Ello+Leilões"/>
+</div>
+</div>
+<div class="hero-shape hero-shape-1"></div>
+<div class="hero-shape hero-shape-2"></div>
+<div class="hero-shape hero-shape-3"></div>
+</section>
+<!-- Main Content -->
+<div class="main-content">
+<div class="auth-container">
+<div class="auth-sidebar">
+<div class="auth-sidebar-content">
+<h2 class="auth-sidebar-title">Leilões Especializados</h2>
+<p class="auth-sidebar-text">A Ello Leilões é especializada em:</p>
+<ul class="auth-features">
+<li class="auth-feature">
+<div class="auth-feature-icon">
+<i class="fas fa-car"></i>
+</div>
+<div class="auth-feature-text">Leilões de veículos</div>
+</li>
+<li class="auth-feature">
+<div class="auth-feature-icon">
+<i class="fas fa-laptop"></i>
+</div>
+<div class="auth-feature-text">Leilões de eletrônicos</div>
+</li>
+<li class="auth-feature">
+<div class="auth-feature-icon">
+<i class="fas fa-building"></i>
+</div>
+<div class="auth-feature-text">Leilões para empreendedores</div>
+</li>
+<li class="auth-feature">
+<div class="auth-feature-icon">
+<i class="fas fa-user"></i>
+</div>
+<div class="auth-feature-text">Leilões para pessoas físicas</div>
+</li>
+</ul>
+</div>
+<div class="auth-sidebar-shape auth-sidebar-shape-1"></div>
+<div class="auth-sidebar-shape auth-sidebar-shape-2"></div>
+</div>
+<div class="auth-forms-container">
+<div class="auth-tabs">
+<div class="auth-tab active" onclick="switchTab('login')">Login</div>
+<div class="auth-tab" onclick="switchTab('register')">Cadastro</div>
+<div class="auth-tab-slider"></div>
+</div>
+<div class="auth-forms">
+<!-- Formulário de Login -->
+<div class="auth-form active" id="login-form">
+<h2 class="form-title">Bem-vindo de volta!</h2>
+<div class="form-group">
+<label class="form-label" for="login-email">E-mail</label>
+<input class="form-control" id="login-email" placeholder="Seu e-mail" required="" type="email"/>
+<i class="fas fa-envelope form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="login-password">Senha</label>
+<input class="form-control" id="login-password" placeholder="Sua senha" required="" type="password"/>
+<i class="fas fa-lock form-icon"></i>
+</div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="form-check">
+<input class="form-check-input" id="remember-me" type="checkbox"/>
+<label class="form-check-label" for="remember-me">Lembrar-me</label>
+</div>
+<a href="#" style="color: var(--primary-color); font-weight: 500;">Esqueceu a senha?</a>
+</div>
+<button class="btn-auth" onclick="handleLogin()" type="button">Entrar</button>
+<div class="error-message" id="login-error"></div>
+<div class="form-footer">
+              Não tem uma conta? <a href="#" onclick="switchTab('register')">Cadastre-se</a>
+</div>
+</div>
+<!-- Formulário de Cadastro -->
+<div class="auth-form" id="register-form">
+<h2 class="form-title">Crie sua conta</h2>
+<div class="form-group">
+<label class="form-label" for="register-name">Nome completo</label>
+<input class="form-control" id="register-name" placeholder="Seu nome completo" required="" type="text"/>
+<i class="fas fa-user form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-cpf">CPF</label>
+<input class="form-control" id="register-cpf" placeholder="000.000.000-00" required="" type="text"/>
+<i class="fas fa-id-card form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-phone">Telefone com WhatsApp</label>
+<input class="form-control" id="register-phone" placeholder="(00) 00000-0000" required="" type="tel"/>
+<i class="fab fa-whatsapp form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-type">Tipo de cadastro</label>
+<select class="form-control" id="register-type" required="">
+<option disabled="" selected="" value="">Selecione o tipo de cadastro</option>
+<option value="pessoa_fisica">Pessoa Física</option>
+<option value="empreendedor">Empreendedor do Ramo de Leilões</option>
+</select>
+<i class="fas fa-user-tag form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-email">E-mail</label>
+<input class="form-control" id="register-email" placeholder="Seu e-mail" required="" type="email"/>
+<i class="fas fa-envelope form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-password">Senha</label>
+<input class="form-control" id="register-password" placeholder="Crie uma senha" required="" type="password"/>
+<i class="fas fa-lock form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-confirm-password">Confirme a senha</label>
+<input class="form-control" id="register-confirm-password" placeholder="Confirme sua senha" required="" type="password"/>
+<i class="fas fa-lock form-icon"></i>
+</div>
+<div class="form-group">
+<label class="form-label" for="register-discovery">Como você descobriu a Ello Leilões? (opcional)</label>
+<select class="form-control" id="register-discovery">
+<option disabled="" selected="" value="">Selecione uma opção</option>
+<option value="google">Google</option>
+<option value="redes_sociais">Redes Sociais</option>
+<option value="amigos">Indicação de Amigos</option>
+<option value="tv">TV</option>
+<option value="radio">Rádio</option>
+<option value="outros">Outros</option>
+</select>
+<i class="fas fa-search form-icon"></i>
+</div>
+<div class="form-check mb-4">
+<input class="form-check-input" id="terms" required="" type="checkbox"/>
+<label class="form-check-label" for="terms">
+                Concordo com os <a href="#" style="color: var(--primary-color);">Termos de Uso</a> e <a href="#" style="color: var(--primary-color);">Política de Privacidade</a>
+</label>
+</div>
+<button class="btn-auth" onclick="handleRegister()" type="button">Cadastrar</button>
+<div class="error-message" id="register-error"></div>
+<div class="form-footer">
+              Já tem uma conta? <a href="#" onclick="switchTab('login')">Faça login</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Partners Section -->
+<section class="partners-section" id="partners">
+<div class="floating-element floating-1"></div>
+<div class="floating-element floating-2"></div>
+<h2 class="section-title">Cooperativas Parceiras</h2>
+<div class="partners-container">
+<div class="partners-grid">
+<!-- 10 Cooperativas de Crédito -->
+<div class="partner-card">
+<div class="partner-logo">Sicoob</div>
+<div class="partner-info">Sistema de Cooperativas de Crédito do Brasil</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Sicredi</div>
+<div class="partner-info">Sistema de Crédito Cooperativo</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Unicred</div>
+<div class="partner-info">Cooperativa de Economia e Crédito Mútuo</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Cresol</div>
+<div class="partner-info">Cooperativa de Crédito Rural</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Credisis</div>
+<div class="partner-info">Sistema de Crédito Cooperativo</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Ailos</div>
+<div class="partner-info">Sistema de Cooperativas de Crédito</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Cecred</div>
+<div class="partner-info">Cooperativa Central de Crédito</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Uniprime</div>
+<div class="partner-info">Cooperativa de Economia e Crédito Mútuo</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Credicitrus</div>
+<div class="partner-info">Cooperativa de Crédito Rural</div>
+</div>
+<div class="partner-card">
+<div class="partner-logo">Coopercred</div>
+<div class="partner-info">Cooperativa de Crédito Rural</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Empresa Section -->
+<section class="empresa-section" id="empresa">
+<div class="empresa-container">
+<h2 class="section-title">Nossa Empresa</h2>
+<div class="empresa-content">
+<div class="empresa-image">
+<img alt="Sede da Ello Leilões" src="https://via.placeholder.com/600x400/f26522/ffffff?text=Sede+Ello+Leilões"/>
+</div>
+<div class="empresa-info">
+<h3 class="empresa-title">Ello Leilões</h3>
+<p class="empresa-description">
+            A Ello Leilões é especializada em leilões para empreendedores do ramo e pessoas físicas. Nossa empresa oferece leilões exclusivos de veículos, eletrônicos e diversos outros itens, sempre com transparência e segurança em todas as transações.
+          </p>
+<div class="empresa-address">
+<h4 class="empresa-address-title">Endereço e Contato</h4>
+<div class="empresa-address-item">
+<div class="empresa-address-icon">
+<i class="fas fa-map-marker-alt"></i>
+</div>
+<div class="empresa-address-text">
+                Av. Paulista, 1000 - Bela Vista<br/>
+                São Paulo - SP, 01310-100<br/>
+                Brasil
+              </div>
+</div>
+<div class="empresa-address-item">
+<div class="empresa-address-icon">
+<i class="fas fa-phone-alt"></i>
+</div>
+<div class="empresa-address-text">
+                (11) 1234-5678
+              </div>
+</div>
+<div class="empresa-address-item">
+<div class="empresa-address-icon">
+<i class="fas fa-envelope"></i>
+</div>
+<div class="empresa-address-text">
+                contato@elloleiloes.com.br
+              </div>
+</div>
+<div class="empresa-address-item">
+<div class="empresa-address-icon">
+<i class="fas fa-clock"></i>
+</div>
+<div class="empresa-address-text">
+                Segunda a Sexta: 9h às 18h
+              </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-grid">
+<div class="footer-column">
+<div class="footer-logo">
+<div class="footer-logo-text">ELLO LEILÕES</div>
+</div>
+<p class="footer-description">
+            A Ello Leilões é especializada em leilões para empreendedores do ramo e pessoas físicas, oferecendo oportunidades exclusivas em veículos, eletrônicos e muito mais.
+          </p>
+</div>
+<div class="footer-column">
+<h3 class="footer-title">Links Rápidos</h3>
+<ul class="footer-links">
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Início</a></li>
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Leilões Ativos</a></li>
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Como Participar</a></li>
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Sobre Nós</a></li>
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+<li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Contato</a></li>
+</ul>
+</div>
+<div class="footer-column">
+<h3 class="footer-title">Contato</h3>
+<ul class="footer-contact">
+<li class="footer-contact-item">
+<div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+<div class="footer-contact-text">Av. Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100</div>
+</li>
+<li class="footer-contact-item">
+<div class="footer-contact-icon"><i class="fas fa-phone-alt"></i></div>
+<div class="footer-contact-text">(11) 1234-5678</div>
+</li>
+<li class="footer-contact-item">
+<div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+<div class="footer-contact-text">contato@elloleiloes.com.br</div>
+</li>
+<li class="footer-contact-item">
+<div class="footer-contact-icon"><i class="fas fa-clock"></i></div>
+<div class="footer-contact-text">Segunda a Sexta: 9h às 18h</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="footer-copyright">
+          © 2025 Ello Leilões - Todos os direitos reservados | Desenvolvido por GS Leilões
+        </div>
+<div class="footer-bottom-links">
+<a class="footer-bottom-link" href="#">Termos de Uso</a>
+<a class="footer-bottom-link" href="#">Política de Privacidade</a>
+<a class="footer-bottom-link" href="#">Cookies</a>
+</div>
+</div>
+</div>
+<div class="footer-shape footer-shape-1"></div>
+<div class="footer-shape footer-shape-2"></div>
+</footer>
+<script>
+const supabaseUrl = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(item => {
+    item.classList.remove('active');
+  });
+  document.querySelectorAll('.auth-form').forEach(item => {
+    item.classList.remove('active');
+  });
+  if (tab === 'login') {
+    document.querySelector('.auth-tab:nth-child(1)').classList.add('active');
+    document.getElementById('login-form').classList.add('active');
+    document.querySelector('.auth-tab-slider').style.left = '0';
+  } else {
+    document.querySelector('.auth-tab:nth-child(2)').classList.add('active');
+    document.getElementById('register-form').classList.add('active');
+    document.querySelector('.auth-tab-slider').style.left = '50%';
+  }
+}
+
+function scrollToAuth() {
+  document.querySelector('.auth-container').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToPartners() {
+  document.getElementById('partners').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errorElement = document.getElementById('login-error');
+
+  errorElement.textContent = '';
+  errorElement.style.display = 'none';
+
+  if (!email || !password) {
+    errorElement.textContent = 'Por favor, preencha todos os campos';
+    errorElement.style.display = 'block';
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    window.location.href = 'vcgosta.html';
+  } catch (error) {
+    errorElement.textContent = 'Erro no login: ' + error.message;
+    errorElement.style.display = 'block';
+  }
+}
+
+async function handleRegister() {
+  const name = document.getElementById('register-name').value;
+  const cpf = document.getElementById('register-cpf').value.replace(/\D/g, '');
+  const phone = document.getElementById('register-phone').value.replace(/\D/g, '');
+  const type = document.getElementById('register-type').value;
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
+  const confirmPassword = document.getElementById('register-confirm-password').value;
+  const discovery = document.getElementById('register-discovery').value;
+  const errorElement = document.getElementById('register-error');
+
+  errorElement.textContent = '';
+  errorElement.style.display = 'none';
+
+  if (!name || !cpf || !phone || !type || !email || !password || !confirmPassword) {
+    errorElement.textContent = 'Por favor, preencha todos os campos obrigatórios';
+    errorElement.style.display = 'block';
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    errorElement.textContent = 'As senhas não coincidem';
+    errorElement.style.display = 'block';
+    return;
+  }
+
+  if (!document.getElementById('terms').checked) {
+    errorElement.textContent = 'Você deve aceitar os Termos de Uso e Política de Privacidade';
+    errorElement.style.display = 'block';
+    return;
+  }
+
+  try {
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+          cpf,
+          phone,
+          user_type: type,
+          discovery_method: discovery || null
+        }
+      }
+    });
+    if (authError) throw authError;
+
+    const { data: userData, error: userError } = await supabase
+      .from('profiles')
+      .insert([{
+        id: authData.user.id,
+        email,
+        nome_completo: name,
+        cpf,
+        telefone: phone,
+        tipo_usuario: type,
+        como_descobriu: discovery || null
+      }]);
+    if (userError) throw userError;
+
+    alert('Cadastro realizado com sucesso! Verifique seu e-mail para confirmar sua conta.');
+    window.location.href = 'vcgosta.html';
+  } catch (error) {
+    errorElement.textContent = 'Erro no cadastro: ' + error.message;
+    errorElement.style.display = 'block';
+  }
+}
+</script></body></html>
+
