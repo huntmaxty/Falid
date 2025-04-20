@@ -1,9 +1,8 @@
-<!-- auth_client_simplified.js -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     // Verificar se o Supabase está disponível globalmente
     if (!window.supabase) {
-      console.error('Erro: Supabase não está inicializado. Verifique se supabase_init.js foi carregado corretamente.');
+      console.error('Erro: Supabase não está inicializado.');
       return;
     }
 
@@ -253,5 +252,3 @@
     }
   }
 </script>
-
-        
