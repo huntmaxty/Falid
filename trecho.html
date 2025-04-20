@@ -10,6 +10,259 @@
   <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Importações do Firebase (versão modular) -->
+  <script type="module">
+    // Importar as funções e serviços do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_WGj92eLXpZkFcECGij4q6q2nOHHBNaU",
+      authDomain: "magistro-3e355.firebaseapp.com",
+      projectId: "magistro-3e355",
+      storageBucket: "magistro-3e355.firebasestorage.app",
+      messagingSenderId: "282094079424",
+      appId: "1:282094079424:web:75251b079963f3d2c70c25",
+      measurementId: "G-W6H88EPZKN"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    // Função para enviar lance para o Firebase
+    window.enviarLance = async function() {
+      const form = document.querySelector('#lanceModal .modal-body');
+      const inputs = form.querySelectorAll('input').not('[readonly]').not('[placeholder*="opcional"]');
+      let valid = true;
+      
+      // Validação básica
+      inputs.forEach(input => {
+        if (input.value.trim() === '') {
+          input.classList.add('is-invalid');
+          valid = false;
+        } else {
+          input.classList.remove('is-invalid');
+        }
+      });
+      
+      if (!valid) {
+        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Por favor, preencha todos os campos obrigatórios.</div>');
+        setTimeout(function() {
+          const alert = form.querySelector('.alert-danger');
+          if (alert) alert.remove();
+        }, 3000);
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = form.querySelector('input[placeholder="Nome completo"]').value;
+      const telefone = form.querySelector('input[placeholder="Telefone com WhatsApp"]').value;
+      const afiliacao = form.querySelector('input[placeholder="Número de Afiliação (opcional)"]').value;
+      const convite = form.querySelector('input[placeholder="Convite (opcional)"]').value;
+      const valorOferta = document.getElementById('valorOferta').value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = form.querySelector('.btn-submit');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "lances"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorOferta: parseFloat(valorOferta),
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
+        });
+        
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-success');
+        btnSubmit.classList.add('btn-success');
+        
+        // Fechar modal após um tempo
+        setTimeout(function() {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('lanceModal'));
+          modal.hide();
+          
+          // Resetar botão
+          setTimeout(function() {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            
+            // Limpar formulário
+            form.querySelectorAll('input:not([readonly])').forEach(input => {
+              input.value = '';
+            });
+            document.getElementById('valorOferta').value = '20000';
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar lance:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Erro ao enviar lance. Tente novamente.</div>');
+        setTimeout(function() {
+          const alert = form.querySelector('.alert-danger');
+          if (alert) alert.remove();
+        }, 3000);
+      }
+    };
+    
+    // Função para enviar adjudicação para o Firebase
+    window.enviarAdjudicacao = async function() {
+      const form = document.querySelector('#adjModal .modal-body');
+      const inputs = form.querySelectorAll('input').not('[readonly]').not('[placeholder*="opcional"]');
+      let valid = true;
+      
+      // Validação básica
+      inputs.forEach(input => {
+        if (input.value.trim() === '') {
+          input.classList.add('is-invalid');
+          valid = false;
+        } else {
+          input.classList.remove('is-invalid');
+        }
+      });
+      
+      if (!valid) {
+        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Por favor, preencha todos os campos obrigatórios.</div>');
+        setTimeout(function() {
+          const alert = form.querySelector('.alert-danger');
+          if (alert) alert.remove();
+        }, 3000);
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = form.querySelector('input[placeholder="Nome completo"]').value;
+      const telefone = form.querySelector('input[placeholder="Telefone com WhatsApp"]').value;
+      const afiliacao = form.querySelector('input[placeholder="Número de Afiliação (opcional)"]').value;
+      const convite = form.querySelector('input[placeholder="Convite (opcional)"]').value;
+      const valorAdjudicacao = form.querySelector('input[readonly]').value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = form.querySelector('.btn-submit');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "adjudicacoes"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorAdjudicacao: valorAdjudicacao,
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
+        });
+        
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-primary');
+        btnSubmit.classList.add('btn-success');
+        
+        // Fechar modal após um tempo
+        setTimeout(function() {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('adjModal'));
+          modal.hide();
+          
+          // Resetar botão
+          setTimeout(function() {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('btn-success');
+            btnSubmit.classList.add('btn-primary');
+            
+            // Limpar formulário
+            form.querySelectorAll('input:not([readonly])').forEach(input => {
+              input.value = '';
+            });
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar adjudicação:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Erro ao enviar solicitação. Tente novamente.</div>');
+        setTimeout(function() {
+          const alert = form.querySelector('.alert-danger');
+          if (alert) alert.remove();
+        }, 3000);
+      }
+    };
+    
+    // Função para calcular frete
+    window.calcularFrete = function() {
+      const valorProduto = parseFloat(document.getElementById('valorProduto').value || 0);
+      const cidade = document.getElementById('cidadeDestino').value;
+      const estado = document.getElementById('estadoDestino').value;
+      const resultadoDiv = document.getElementById('resultadoFrete');
+      
+      if (!valorProduto || !cidade || !estado) {
+        resultadoDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos.';
+        resultadoDiv.classList.remove('d-none', 'alert-success');
+        resultadoDiv.classList.add('alert-danger');
+        return;
+      }
+      
+      // Cálculo do frete (3.5% do valor do produto)
+      const valorFrete = valorProduto * 0.035;
+      
+      // Valor mínimo de frete
+      const freteMinimo = 50;
+      const freteMaximo = 1000;
+      
+      let freteFinal = valorFrete;
+      if (valorFrete < freteMinimo) freteFinal = freteMinimo;
+      if (valorFrete > freteMaximo) freteFinal = freteMaximo;
+      
+      resultadoDiv.innerHTML = `<i class="fas fa-check-circle"></i> Frete para ${cidade}/${estado}: <strong>R$ ${freteFinal.toFixed(2)}</strong>`;
+      resultadoDiv.classList.remove('d-none', 'alert-danger');
+      resultadoDiv.classList.add('alert-success');
+      
+      // Salvar cálculo no Firebase
+      try {
+        addDoc(collection(db, "calculos_frete"), {
+          valorProduto: valorProduto,
+          cidade: cidade,
+          estado: estado,
+          valorFrete: freteFinal,
+          dataCriacao: serverTimestamp()
+        });
+      } catch (error) {
+        console.error("Erro ao salvar cálculo de frete:", error);
+      }
+    };
+    
+    // Inicializar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Atualizar os botões para chamar as funções do Firebase
+      const lanceBotao = document.querySelector('#lanceModal .btn-submit');
+      if (lanceBotao) {
+        lanceBotao.addEventListener('click', window.enviarLance);
+      }
+      
+      const adjBotao = document.querySelector('#adjModal .btn-submit');
+      if (adjBotao) {
+        adjBotao.addEventListener('click', window.enviarAdjudicacao);
+      }
+      
+      // Iniciar o temporizador
+      atualizarTemporizador();
+      setInterval(atualizarTemporizador, 1000);
+    });
+  </script>
   <style>
     :root {
       --primary-color: #2c3e50;
@@ -808,46 +1061,6 @@
       }).on('blur', function() {
         $(this).removeClass('border-primary');
       });
-      
-      // Validação básica de formulários
-      $('.btn-submit').click(function(e) {
-        const form = $(this).closest('.modal-body');
-        const inputs = form.find('input').not('[readonly]').not('[placeholder*="opcional"]');
-        let valid = true;
-        
-        inputs.each(function() {
-          if ($(this).val().trim() === '') {
-            $(this).addClass('is-invalid');
-            valid = false;
-          } else {
-            $(this).removeClass('is-invalid');
-          }
-        });
-        
-        if (!valid) {
-          e.preventDefault();
-          form.prepend('<div class="alert alert-danger mb-3">Por favor, preencha todos os campos obrigatórios.</div>');
-          setTimeout(function() {
-            form.find('.alert-danger').fadeOut(function() {
-              $(this).remove();
-            });
-          }, 3000);
-        } else {
-          form.find('.btn-submit').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...').prop('disabled', true);
-          setTimeout(function() {
-            form.find('.btn-submit').html('Enviado com sucesso!').removeClass('btn-primary btn-success').addClass('btn-success');
-            setTimeout(function() {
-              $('.modal').modal('hide');
-              form.find('.btn-submit').prop('disabled', false).html(form.find('.btn-submit').data('original-text') || '<i class="fas fa-paper-plane"></i> Enviar');
-            }, 1500);
-          }, 1500);
-        }
-      });
-      
-      // Salvar texto original dos botões
-      $('.btn-submit').each(function() {
-        $(this).data('original-text', $(this).html());
-      });
     });
 
     function alterarValor(valor) {
@@ -872,107 +1085,19 @@
         const segundos = String(Math.floor((diferenca / 1000) % 60)).padStart(2, '0');
 
         // Cálculo da porcentagem de tempo restante (assumindo que o leilão dura 30 dias)
-        const duracaoTotal = 30 * 24 * 60 * 60 * 1000; // 30 dias em milissegundos
-        const porcentagemRestante = Math.min(100, Math.max(0, (diferenca / duracaoTotal) * 100));
+        const porcentagem = Math.min(100, Math.max(0, diferenca / (30 * 24 * 60 * 60 * 1000) * 100));
         
-        const dataFormatada = `${fim.getDate().toString().padStart(2, '0')}/${(fim.getMonth() + 1).toString().padStart(2, '0')}/${fim.getFullYear()}`;
-        const horaFormatada = `${fim.getHours().toString().padStart(2, '0')}:${fim.getMinutes().toString().padStart(2, '0')}`;
+        container.innerHTML = `<i class="fas fa-clock"></i> Leilão em andamento: <strong>${dias} dias, ${horas}:${minutos}:${segundos}</strong>`;
+        container.className = "countdown-box countdown-ativo";
         
-        container.innerHTML = `
-          <div class="mb-2">
-            <i class="fas fa-clock"></i> Termina em <strong>${dataFormatada}</strong> às <strong>${horaFormatada}</strong>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <small>Tempo restante:</small>
-            <strong>${dias} dias, ${horas}:${minutos}:${segundos}</strong>
-          </div>
-          <div class="progress" style="height: 8px;">
-            <div class="progress-bar bg-success" role="progressbar" style="width: ${porcentagemRestante}%" 
-                 aria-valuenow="${porcentagemRestante}" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        `;
-        container.classList.remove("countdown-encerrado");
-        container.classList.add("countdown-ativo");
-        
-        // Efeito pulsante quando faltarem menos de 24 horas
-        if (dias < 1) {
+        // Adicionar animação de pulso quando estiver próximo do fim
+        if (diferenca < (24 * 60 * 60 * 1000)) { // Menos de 24 horas
           container.classList.add("pulse-animation");
-        } else {
-          container.classList.remove("pulse-animation");
         }
       } else {
-        container.innerHTML = `
-          <div class="text-center">
-            <i class='fas fa-flag-checkered'></i> Leilão Encerrado
-          </div>
-          <div class="mt-2 small text-muted">
-            Este leilão foi finalizado em ${fim.getDate().toString().padStart(2, '0')}/${(fim.getMonth() + 1).toString().padStart(2, '0')}/${fim.getFullYear()} às ${fim.getHours().toString().padStart(2, '0')}:${fim.getMinutes().toString().padStart(2, '0')}
-          </div>
-        `;
-        container.classList.remove("countdown-ativo", "pulse-animation");
-        container.classList.add("countdown-encerrado");
+        container.innerHTML = `<i class="fas fa-times-circle"></i> Leilão encerrado`;
+        container.className = "countdown-box countdown-encerrado";
       }
-    }
-
-    atualizarTemporizador();
-    setInterval(atualizarTemporizador, 1000);
-
-    function calcularFrete() {
-      const valor = parseFloat(document.getElementById("valorProduto").value);
-      const cidade = document.getElementById("cidadeDestino").value;
-      const estado = document.getElementById("estadoDestino").value;
-      const resultado = document.getElementById("resultadoFrete");
-
-      if (isNaN(valor) || !estado || !cidade) {
-        resultado.innerHTML = "<i class='fas fa-exclamation-circle'></i> Preencha todos os campos corretamente.";
-        resultado.classList.remove("d-none", "alert-success");
-        resultado.classList.add("alert-danger");
-        return;
-      }
-
-      // Mostrar indicador de carregamento
-      resultado.innerHTML = "<div class='text-center'><span class='spinner-border spinner-border-sm' role='status'></span> Calculando...</div>";
-      resultado.classList.remove("d-none", "alert-danger", "alert-success");
-      
-      // Simular tempo de processamento
-      setTimeout(function() {
-        let freteBase = valor >= 25000 ? valor * 0.045 : 1000;
-
-        const acrescimos = {
-          "norte": 0.005,
-          "sul": 0.01,
-          "sudeste": 0.012,
-          "nordeste": 0.007,
-          "centro-oeste": 0.019
-        };
-
-        freteBase += freteBase * acrescimos[estado];
-        
-        // Adicionar variação baseada no comprimento do nome da cidade (simulação)
-        const variacaoCidade = (cidade.length % 5) * 0.001;
-        freteBase = freteBase * (1 + variacaoCidade);
-        
-        const valorFormatado = freteBase.toFixed(2).replace(".", ",");
-        const prazoEntrega = 3 + (estado === "norte" || estado === "nordeste" ? 2 : 0);
-        
-        resultado.innerHTML = `
-          <div class="text-center mb-2"><i class="fas fa-check-circle text-success fa-2x"></i></div>
-          <div class="d-flex justify-content-between mb-2">
-            <span>Valor do frete:</span>
-            <strong>R$ ${valorFormatado}</strong>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <span>Prazo de entrega:</span>
-            <strong>${prazoEntrega} a ${prazoEntrega + 2} dias úteis</strong>
-          </div>
-          <div class="d-flex justify-content-between">
-            <span>Cidade/Estado:</span>
-            <strong>${cidade}/${estado.toUpperCase()}</strong>
-          </div>
-        `;
-        resultado.classList.remove("d-none", "alert-danger");
-        resultado.classList.add("alert-success");
-      }, 1500);
     }
   </script>
 </body>
