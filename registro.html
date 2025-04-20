@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Login e Registro</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Inicializar Supabase globalmente
+        const supabase = supabaseJs.createClient(
+            'https://qgqahdkthbfvldmdtcyk.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0'
+        );
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .form-container {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Login e Registro</h1>
+    
+    <div class="container">
+        <!-- Formulário de Login -->
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="login-result" class="result"></div>
+        </div>
+        
+        <!-- Formulário de Registro -->
+        <div class="form-container">
+            <h2>Registro</h2>
+            <form id="register-form">
+                <input type="text" id="register-name" placeholder="Nome completo" required>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Senha" required>
+                <input type="password" id="register-confirm-password" placeholder="Confirmar senha" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <div id="register-result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Função para mostrar resultado
+        function showResult(elementId, message, isSuccess) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = isSuccess ? 'result success' : 'result error';
+        }
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                showResult('login-result', 'Login bem-sucedido!', true);
+                console.log('Usuário logado:', data);
+            } catch (error) {
+                showResult('login-result', 'Erro: ' + error.message, false);
+                console.error('Erro de login:', error);
+            }
+        });
+
+        // Registro
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                showResult('register-result', 'Erro: As senhas não coincidem', false);
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            nome_completo: name
+                        }
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // Criar perfil do usuário
+                if (data.user) {
+                    try {
+                        const { error: profileError } = await supabase.from('profiles').insert([
+                            {
+                                id: data.user.id,
+                                nome_completo: name
+                            }
+                        ]);
+                        
+                        if (profileError) throw profileError;
+                    } catch (profileError) {
+                        console.error('Erro ao criar perfil:', profileError);
+                    }
+                }
+                
+                showResult('register-result', 'Registro bem-sucedido! Verifique seu email para confirmar.', true);
+                console.log('Usuário registrado:', data);
+            } catch (error) {
+                showResult('register-result', 'Erro: ' + error.message, false);
+                console.error('Erro de registro:', error);
+            }
+        });
+    </script>
+</body>
+              </html>
+  
