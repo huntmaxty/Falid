@@ -10,7 +10,10 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<script src="firebase_fix.js"></script>
+<!-- Importações do Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script type="module" src="firebase-config.js"></script>
 </head>
     <style>
     :root {
@@ -750,7 +753,6 @@
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 20px;
     }
 
     .footer-logo-text {
@@ -1026,7 +1028,6 @@
       text-fill-color: transparent;
     }
   </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
     .error-message {
       color: var(--danger-color);
@@ -1384,9 +1385,13 @@
 </footer>
 </body></html>
 <script>
-const supabaseUrl = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Inicialização do Firebase
+let auth;
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar o Firebase Auth após o carregamento do DOM
+  auth = firebase.auth();
+});
 
 function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(item => {
@@ -1429,29 +1434,52 @@ async function handleLogin() {
   }
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    // Usuário logado com sucesso
     window.location.href = 'vcgosta.html';
   } catch (error) {
-    errorElement.textContent = 'Erro no login: ' + error.message;
+    // Tratamento de erros
+    let errorMessage = 'Erro no login: ';
+    
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage += 'E-mail inválido.';
+        break;
+      case 'auth/user-disabled':
+        errorMessage += 'Usuário desativado.';
+        break;
+      case 'auth/user-not-found':
+        errorMessage += 'Usuário não encontrado.';
+        break;
+      case 'auth/wrong-password':
+        errorMessage += 'Senha incorreta.';
+        break;
+      default:
+        errorMessage += error.message;
+    }
+    
+    errorElement.textContent = errorMessage;
     errorElement.style.display = 'block';
+    console.error('Erro no login:', error);
   }
 }
 
 async function handleRegister() {
   const name = document.getElementById('register-name').value;
-  const cpf = document.getElementById('register-cpf').value.replace(/\D/g, '');
-  const phone = document.getElementById('register-phone').value.replace(/\D/g, '');
+  const cpf = document.getElementById('register-cpf').value;
+  const phone = document.getElementById('register-phone').value;
   const type = document.getElementById('register-type').value;
   const email = document.getElementById('register-email').value;
   const password = document.getElementById('register-password').value;
   const confirmPassword = document.getElementById('register-confirm-password').value;
   const discovery = document.getElementById('register-discovery').value;
+  const terms = document.getElementById('terms').checked;
   const errorElement = document.getElementById('register-error');
 
   errorElement.textContent = '';
   errorElement.style.display = 'none';
 
+  // Validações básicas
   if (!name || !cpf || !phone || !type || !email || !password || !confirmPassword) {
     errorElement.textContent = 'Por favor, preencha todos os campos obrigatórios';
     errorElement.style.display = 'block';
@@ -1464,47 +1492,59 @@ async function handleRegister() {
     return;
   }
 
-  if (!document.getElementById('terms').checked) {
-    errorElement.textContent = 'Você deve aceitar os Termos de Uso e Política de Privacidade';
+  if (!terms) {
+    errorElement.textContent = 'Você precisa concordar com os Termos de Uso e Política de Privacidade';
     errorElement.style.display = 'block';
     return;
   }
 
   try {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: name,
-          cpf,
-          phone,
-          user_type: type,
-          discovery_method: discovery || null
-        }
-      }
+    // Criar usuário no Firebase Authentication
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+    
+    // Atualizar o perfil do usuário com o nome
+    await user.updateProfile({
+      displayName: name
     });
-    if (authError) throw authError;
-
-    const { data: userData, error: userError } = await supabase
-      .from('profiles')
-      .insert([{
-        id: authData.user.id,
-        email,
-        nome_completo: name,
-        cpf,
-        telefone: phone,
-        tipo_usuario: type,
-        como_descobriu: discovery || null
-      }]);
-    if (userError) throw userError;
-
-    alert('Cadastro realizado com sucesso! Verifique seu e-mail para confirmar sua conta.');
+    
+    // Aqui você pode adicionar código para salvar os dados adicionais no Firestore
+    // Por exemplo:
+    /*
+    const db = firebase.firestore();
+    await db.collection('users').doc(user.uid).set({
+      name: name,
+      cpf: cpf,
+      phone: phone,
+      type: type,
+      discovery: discovery,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    */
+    
+    // Redirecionar após cadastro bem-sucedido
     window.location.href = 'vcgosta.html';
   } catch (error) {
-    errorElement.textContent = 'Erro no cadastro: ' + error.message;
+    // Tratamento de erros
+    let errorMessage = 'Erro no cadastro: ';
+    
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        errorMessage += 'Este e-mail já está em uso.';
+        break;
+      case 'auth/invalid-email':
+        errorMessage += 'E-mail inválido.';
+        break;
+      case 'auth/weak-password':
+        errorMessage += 'A senha é muito fraca.';
+        break;
+      default:
+        errorMessage += error.message;
+    }
+    
+    errorElement.textContent = errorMessage;
     errorElement.style.display = 'block';
+    console.error('Erro no cadastro:', error);
   }
 }
 </script>
-
