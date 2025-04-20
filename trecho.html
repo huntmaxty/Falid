@@ -10,259 +10,6 @@
   <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Importações do Firebase (versão modular) -->
-  <script type="module">
-    // Importar as funções e serviços do Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-    
-    // Configuração do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC_WGj92eLXpZkFcECGij4q6q2nOHHBNaU",
-      authDomain: "magistro-3e355.firebaseapp.com",
-      projectId: "magistro-3e355",
-      storageBucket: "magistro-3e355.firebasestorage.app",
-      messagingSenderId: "282094079424",
-      appId: "1:282094079424:web:75251b079963f3d2c70c25",
-      measurementId: "G-W6H88EPZKN"
-    };
-
-    // Inicializar Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    
-    // Função para enviar lance para o Firebase
-    window.enviarLance = async function() {
-      const form = document.querySelector('#lanceModal .modal-body');
-      const inputs = form.querySelectorAll('input').not('[readonly]').not('[placeholder*="opcional"]');
-      let valid = true;
-      
-      // Validação básica
-      inputs.forEach(input => {
-        if (input.value.trim() === '') {
-          input.classList.add('is-invalid');
-          valid = false;
-        } else {
-          input.classList.remove('is-invalid');
-        }
-      });
-      
-      if (!valid) {
-        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Por favor, preencha todos os campos obrigatórios.</div>');
-        setTimeout(function() {
-          const alert = form.querySelector('.alert-danger');
-          if (alert) alert.remove();
-        }, 3000);
-        return;
-      }
-      
-      // Obter dados do formulário
-      const nome = form.querySelector('input[placeholder="Nome completo"]').value;
-      const telefone = form.querySelector('input[placeholder="Telefone com WhatsApp"]').value;
-      const afiliacao = form.querySelector('input[placeholder="Número de Afiliação (opcional)"]').value;
-      const convite = form.querySelector('input[placeholder="Convite (opcional)"]').value;
-      const valorOferta = document.getElementById('valorOferta').value;
-      
-      // Mostrar feedback de carregamento
-      const btnSubmit = form.querySelector('.btn-submit');
-      const originalText = btnSubmit.innerHTML;
-      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
-      btnSubmit.disabled = true;
-      
-      try {
-        // Salvar no Firebase
-        await addDoc(collection(db, "lances"), {
-          nome: nome,
-          telefone: telefone,
-          afiliacao: afiliacao || null,
-          convite: convite || null,
-          valorOferta: parseFloat(valorOferta),
-          produto: "Jeep Compass Longitude 2018",
-          dataCriacao: serverTimestamp()
-        });
-        
-        // Feedback de sucesso
-        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
-        btnSubmit.classList.remove('btn-success');
-        btnSubmit.classList.add('btn-success');
-        
-        // Fechar modal após um tempo
-        setTimeout(function() {
-          const modal = bootstrap.Modal.getInstance(document.getElementById('lanceModal'));
-          modal.hide();
-          
-          // Resetar botão
-          setTimeout(function() {
-            btnSubmit.innerHTML = originalText;
-            btnSubmit.disabled = false;
-            
-            // Limpar formulário
-            form.querySelectorAll('input:not([readonly])').forEach(input => {
-              input.value = '';
-            });
-            document.getElementById('valorOferta').value = '20000';
-          }, 500);
-        }, 1500);
-        
-      } catch (error) {
-        console.error("Erro ao salvar lance:", error);
-        btnSubmit.innerHTML = originalText;
-        btnSubmit.disabled = false;
-        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Erro ao enviar lance. Tente novamente.</div>');
-        setTimeout(function() {
-          const alert = form.querySelector('.alert-danger');
-          if (alert) alert.remove();
-        }, 3000);
-      }
-    };
-    
-    // Função para enviar adjudicação para o Firebase
-    window.enviarAdjudicacao = async function() {
-      const form = document.querySelector('#adjModal .modal-body');
-      const inputs = form.querySelectorAll('input').not('[readonly]').not('[placeholder*="opcional"]');
-      let valid = true;
-      
-      // Validação básica
-      inputs.forEach(input => {
-        if (input.value.trim() === '') {
-          input.classList.add('is-invalid');
-          valid = false;
-        } else {
-          input.classList.remove('is-invalid');
-        }
-      });
-      
-      if (!valid) {
-        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Por favor, preencha todos os campos obrigatórios.</div>');
-        setTimeout(function() {
-          const alert = form.querySelector('.alert-danger');
-          if (alert) alert.remove();
-        }, 3000);
-        return;
-      }
-      
-      // Obter dados do formulário
-      const nome = form.querySelector('input[placeholder="Nome completo"]').value;
-      const telefone = form.querySelector('input[placeholder="Telefone com WhatsApp"]').value;
-      const afiliacao = form.querySelector('input[placeholder="Número de Afiliação (opcional)"]').value;
-      const convite = form.querySelector('input[placeholder="Convite (opcional)"]').value;
-      const valorAdjudicacao = form.querySelector('input[readonly]').value;
-      
-      // Mostrar feedback de carregamento
-      const btnSubmit = form.querySelector('.btn-submit');
-      const originalText = btnSubmit.innerHTML;
-      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
-      btnSubmit.disabled = true;
-      
-      try {
-        // Salvar no Firebase
-        await addDoc(collection(db, "adjudicacoes"), {
-          nome: nome,
-          telefone: telefone,
-          afiliacao: afiliacao || null,
-          convite: convite || null,
-          valorAdjudicacao: valorAdjudicacao,
-          produto: "Jeep Compass Longitude 2018",
-          dataCriacao: serverTimestamp()
-        });
-        
-        // Feedback de sucesso
-        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
-        btnSubmit.classList.remove('btn-primary');
-        btnSubmit.classList.add('btn-success');
-        
-        // Fechar modal após um tempo
-        setTimeout(function() {
-          const modal = bootstrap.Modal.getInstance(document.getElementById('adjModal'));
-          modal.hide();
-          
-          // Resetar botão
-          setTimeout(function() {
-            btnSubmit.innerHTML = originalText;
-            btnSubmit.disabled = false;
-            btnSubmit.classList.remove('btn-success');
-            btnSubmit.classList.add('btn-primary');
-            
-            // Limpar formulário
-            form.querySelectorAll('input:not([readonly])').forEach(input => {
-              input.value = '';
-            });
-          }, 500);
-        }, 1500);
-        
-      } catch (error) {
-        console.error("Erro ao salvar adjudicação:", error);
-        btnSubmit.innerHTML = originalText;
-        btnSubmit.disabled = false;
-        form.insertAdjacentHTML('afterbegin', '<div class="alert alert-danger mb-3">Erro ao enviar solicitação. Tente novamente.</div>');
-        setTimeout(function() {
-          const alert = form.querySelector('.alert-danger');
-          if (alert) alert.remove();
-        }, 3000);
-      }
-    };
-    
-    // Função para calcular frete
-    window.calcularFrete = function() {
-      const valorProduto = parseFloat(document.getElementById('valorProduto').value || 0);
-      const cidade = document.getElementById('cidadeDestino').value;
-      const estado = document.getElementById('estadoDestino').value;
-      const resultadoDiv = document.getElementById('resultadoFrete');
-      
-      if (!valorProduto || !cidade || !estado) {
-        resultadoDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos.';
-        resultadoDiv.classList.remove('d-none', 'alert-success');
-        resultadoDiv.classList.add('alert-danger');
-        return;
-      }
-      
-      // Cálculo do frete (3.5% do valor do produto)
-      const valorFrete = valorProduto * 0.035;
-      
-      // Valor mínimo de frete
-      const freteMinimo = 50;
-      const freteMaximo = 1000;
-      
-      let freteFinal = valorFrete;
-      if (valorFrete < freteMinimo) freteFinal = freteMinimo;
-      if (valorFrete > freteMaximo) freteFinal = freteMaximo;
-      
-      resultadoDiv.innerHTML = `<i class="fas fa-check-circle"></i> Frete para ${cidade}/${estado}: <strong>R$ ${freteFinal.toFixed(2)}</strong>`;
-      resultadoDiv.classList.remove('d-none', 'alert-danger');
-      resultadoDiv.classList.add('alert-success');
-      
-      // Salvar cálculo no Firebase
-      try {
-        addDoc(collection(db, "calculos_frete"), {
-          valorProduto: valorProduto,
-          cidade: cidade,
-          estado: estado,
-          valorFrete: freteFinal,
-          dataCriacao: serverTimestamp()
-        });
-      } catch (error) {
-        console.error("Erro ao salvar cálculo de frete:", error);
-      }
-    };
-    
-    // Inicializar quando o DOM estiver pronto
-    document.addEventListener('DOMContentLoaded', function() {
-      // Atualizar os botões para chamar as funções do Firebase
-      const lanceBotao = document.querySelector('#lanceModal .btn-submit');
-      if (lanceBotao) {
-        lanceBotao.addEventListener('click', window.enviarLance);
-      }
-      
-      const adjBotao = document.querySelector('#adjModal .btn-submit');
-      if (adjBotao) {
-        adjBotao.addEventListener('click', window.enviarAdjudicacao);
-      }
-      
-      // Iniciar o temporizador
-      atualizarTemporizador();
-      setInterval(atualizarTemporizador, 1000);
-    });
-  </script>
   <style>
     :root {
       --primary-color: #2c3e50;
@@ -923,10 +670,10 @@
           <div class="alert alert-info">
             <i class="fas fa-info-circle"></i> Você receberá instruções de compra e ofertas de outras pessoas no WhatsApp.
           </div>
-          <input type="text" class="form-control" placeholder="Nome completo" />
-          <input type="tel" class="form-control" placeholder="Telefone com WhatsApp" />
-          <input type="text" class="form-control" placeholder="Número de Afiliação (opcional)" />
-          <input type="text" class="form-control" placeholder="Convite (opcional)" />
+          <input type="text" class="form-control" id="lanceName" placeholder="Nome completo" />
+          <input type="tel" class="form-control" id="lancePhone" placeholder="Telefone com WhatsApp" />
+          <input type="text" class="form-control" id="lanceAfiliacao" placeholder="Número de Afiliação (opcional)" />
+          <input type="text" class="form-control" id="lanceConvite" placeholder="Convite (opcional)" />
 
           <label class="form-label mt-3"><i class="fas fa-money-bill-wave"></i> Valor da Oferta</label>
           <div class="value-control">
@@ -935,7 +682,7 @@
             <button class="btn btn-outline-secondary" onclick="alterarValor(500)">+500</button>
           </div>
 
-          <button class="btn btn-success btn-submit"><i class="fas fa-paper-plane"></i> Enviar Oferta</button>
+          <button class="btn btn-success btn-submit" id="enviarLanceBtn"><i class="fas fa-paper-plane"></i> Enviar Oferta</button>
         </div>
       </div>
     </div>
@@ -953,15 +700,15 @@
           <div class="alert alert-info">
             <i class="fas fa-info-circle"></i> Você receberá instruções de compra pelo WhatsApp.
           </div>
-          <input type="text" class="form-control" placeholder="Nome completo" />
-          <input type="tel" class="form-control" placeholder="Telefone com WhatsApp" />
-          <input type="text" class="form-control" placeholder="Número de Afiliação (opcional)" />
-          <input type="text" class="form-control" placeholder="Convite (opcional)" />
+          <input type="text" class="form-control" id="adjName" placeholder="Nome completo" />
+          <input type="tel" class="form-control" id="adjPhone" placeholder="Telefone com WhatsApp" />
+          <input type="text" class="form-control" id="adjAfiliacao" placeholder="Número de Afiliação (opcional)" />
+          <input type="text" class="form-control" id="adjConvite" placeholder="Convite (opcional)" />
 
           <label class="form-label mt-3"><i class="fas fa-tag"></i> Valor da Adjudicação</label>
-          <input type="text" class="form-control" value="R$ 80.000,00" readonly />
+          <input type="text" class="form-control" id="valorAdjudicacao" value="R$ 80.000,00" readonly />
 
-          <button class="btn btn-primary btn-submit"><i class="fas fa-paper-plane"></i> Enviar Solicitação</button>
+          <button class="btn btn-primary btn-submit" id="enviarAdjBtn"><i class="fas fa-paper-plane"></i> Enviar Solicitação</button>
         </div>
       </div>
     </div>
@@ -989,7 +736,7 @@
             <option value="nordeste">Nordeste</option>
             <option value="centro-oeste">Centro-Oeste</option>
           </select>
-          <button class="btn btn-primary w-100" onclick="calcularFrete()">
+          <button class="btn btn-primary w-100" id="calcularFreteBtn">
             <i class="fas fa-calculator"></i> Calcular
           </button>
           <div id="resultadoFrete" class="mt-3 alert alert-success d-none"></div>
@@ -1022,6 +769,341 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Firebase -->
+  <script type="module">
+    // Importar as funções e serviços do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_WGj92eLXpZkFcECGij4q6q2nOHHBNaU",
+      authDomain: "magistro-3e355.firebaseapp.com",
+      projectId: "magistro-3e355",
+      storageBucket: "magistro-3e355.firebasestorage.app",
+      messagingSenderId: "282094079424",
+      appId: "1:282094079424:web:75251b079963f3d2c70c25",
+      measurementId: "G-W6H88EPZKN"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    // Função para enviar lance para o Firebase
+    async function enviarLance() {
+      const form = document.querySelector('#lanceModal .modal-body');
+      
+      // Obter elementos do formulário
+      const nomeInput = document.getElementById('lanceName');
+      const telefoneInput = document.getElementById('lancePhone');
+      const afiliacaoInput = document.getElementById('lanceAfiliacao');
+      const conviteInput = document.getElementById('lanceConvite');
+      const valorOfertaInput = document.getElementById('valorOferta');
+      
+      // Validação básica
+      let valid = true;
+      const requiredInputs = [nomeInput, telefoneInput];
+      
+      requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('is-invalid');
+          valid = false;
+        } else {
+          input.classList.remove('is-invalid');
+        }
+      });
+      
+      if (!valid) {
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos obrigatórios.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
+          }
+        }, 3000);
+        
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = nomeInput.value;
+      const telefone = telefoneInput.value;
+      const afiliacao = afiliacaoInput.value;
+      const convite = conviteInput.value;
+      const valorOferta = valorOfertaInput.value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = document.getElementById('enviarLanceBtn');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "lances"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorOferta: parseFloat(valorOferta),
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
+        });
+        
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-success');
+        btnSubmit.classList.add('btn-success');
+        
+        // Fechar modal após um tempo
+        setTimeout(() => {
+          const lanceModal = bootstrap.Modal.getInstance(document.getElementById('lanceModal'));
+          lanceModal.hide();
+          
+          // Resetar botão
+          setTimeout(() => {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            
+            // Limpar formulário
+            nomeInput.value = '';
+            telefoneInput.value = '';
+            afiliacaoInput.value = '';
+            conviteInput.value = '';
+            valorOfertaInput.value = '20000';
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar lance:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro ao enviar lance. Tente novamente.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
+          }
+        }, 3000);
+      }
+    }
+    
+    // Função para enviar adjudicação para o Firebase
+    async function enviarAdjudicacao() {
+      const form = document.querySelector('#adjModal .modal-body');
+      
+      // Obter elementos do formulário
+      const nomeInput = document.getElementById('adjName');
+      const telefoneInput = document.getElementById('adjPhone');
+      const afiliacaoInput = document.getElementById('adjAfiliacao');
+      const conviteInput = document.getElementById('adjConvite');
+      const valorAdjudicacaoInput = document.getElementById('valorAdjudicacao');
+      
+      // Validação básica
+      let valid = true;
+      const requiredInputs = [nomeInput, telefoneInput];
+      
+      requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('is-invalid');
+          valid = false;
+        } else {
+          input.classList.remove('is-invalid');
+        }
+      });
+      
+      if (!valid) {
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos obrigatórios.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
+          }
+        }, 3000);
+        
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = nomeInput.value;
+      const telefone = telefoneInput.value;
+      const afiliacao = afiliacaoInput.value;
+      const convite = conviteInput.value;
+      const valorAdjudicacao = valorAdjudicacaoInput.value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = document.getElementById('enviarAdjBtn');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "adjudicacoes"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorAdjudicacao: valorAdjudicacao,
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
+        });
+        
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-primary');
+        btnSubmit.classList.add('btn-success');
+        
+        // Fechar modal após um tempo
+        setTimeout(() => {
+          const adjModal = bootstrap.Modal.getInstance(document.getElementById('adjModal'));
+          adjModal.hide();
+          
+          // Resetar botão
+          setTimeout(() => {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('btn-success');
+            btnSubmit.classList.add('btn-primary');
+            
+            // Limpar formulário
+            nomeInput.value = '';
+            telefoneInput.value = '';
+            afiliacaoInput.value = '';
+            conviteInput.value = '';
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar adjudicação:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro ao enviar solicitação. Tente novamente.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
+          }
+        }, 3000);
+      }
+    }
+    
+    // Função para calcular frete
+    function calcularFrete() {
+      const valorProduto = parseFloat(document.getElementById('valorProduto').value || 0);
+      const cidade = document.getElementById('cidadeDestino').value;
+      const estado = document.getElementById('estadoDestino').value;
+      const resultadoDiv = document.getElementById('resultadoFrete');
+      
+      if (!valorProduto || !cidade || !estado) {
+        resultadoDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos.';
+        resultadoDiv.classList.remove('d-none', 'alert-success');
+        resultadoDiv.classList.add('alert-danger');
+        return;
+      }
+      
+      // Cálculo do frete (3.5% do valor do produto)
+      const valorFrete = valorProduto * 0.035;
+      
+      // Valor mínimo de frete
+      const freteMinimo = 50;
+      const freteMaximo = 1000;
+      
+      let freteFinal = valorFrete;
+      if (valorFrete < freteMinimo) freteFinal = freteMinimo;
+      if (valorFrete > freteMaximo) freteFinal = freteMaximo;
+      
+      resultadoDiv.innerHTML = `<i class="fas fa-check-circle"></i> Frete para ${cidade}/${estado}: <strong>R$ ${freteFinal.toFixed(2)}</strong>`;
+      resultadoDiv.classList.remove('d-none', 'alert-danger');
+      resultadoDiv.classList.add('alert-success');
+      
+      // Salvar cálculo no Firebase
+      try {
+        addDoc(collection(db, "calculos_frete"), {
+          valorProduto: valorProduto,
+          cidade: cidade,
+          estado: estado,
+          valorFrete: freteFinal,
+          dataCriacao: serverTimestamp()
+        });
+      } catch (error) {
+        console.error("Erro ao salvar cálculo de frete:", error);
+      }
+    }
+    
+    // Exportar funções para o escopo global
+    window.enviarLance = enviarLance;
+    window.enviarAdjudicacao = enviarAdjudicacao;
+    window.calcularFrete = calcularFrete;
+    
+    // Inicializar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar os botões para chamar as funções do Firebase
+      const lanceBotao = document.getElementById('enviarLanceBtn');
+      if (lanceBotao) {
+        lanceBotao.addEventListener('click', enviarLance);
+      }
+      
+      const adjBotao = document.getElementById('enviarAdjBtn');
+      if (adjBotao) {
+        adjBotao.addEventListener('click', enviarAdjudicacao);
+      }
+      
+      const freteBotao = document.getElementById('calcularFreteBtn');
+      if (freteBotao) {
+        freteBotao.addEventListener('click', calcularFrete);
+      }
+      
+      // Iniciar o temporizador
+      atualizarTemporizador();
+      setInterval(atualizarTemporizador, 1000);
+    });
+  </script>
+  
   <script>
     $(document).ready(function () {
       // Inicialização do carrossel com efeitos aprimorados
