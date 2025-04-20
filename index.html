@@ -11,7 +11,14 @@
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="simple_fix.js"></script>
+<script>
+  // Inicializar o Supabase globalmente
+  const SUPABASE_URL = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
+  
+  // Criar o cliente Supabase e armazená-lo globalmente
+  window.supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
 </head>
     <style>
     :root {
