@@ -1,5 +1,11 @@
 <!-- auth.js -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  // Inicializar o Supabase diretamente
+  const supabaseUrl = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
+  const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+
   document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('login-form');
     const loginEmail = document.getElementById('login-email');
@@ -102,6 +108,7 @@
     if (loginForm) {
       loginForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        console.log('Login form submitted');
 
         const email = loginEmail.value;
         const password = loginPassword.value;
@@ -133,6 +140,7 @@
     if (registerForm) {
       registerForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        console.log('Register form submitted');
 
         if (!validarFormularioCadastro()) return;
 
@@ -242,3 +250,4 @@
     }
   }
 </script>
+      
