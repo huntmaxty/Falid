@@ -1,222 +1,249 @@
 <!-- auth.js -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Inicializar o Supabase diretamente
-  const supabaseUrl = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
-  const supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+  // Aguardar até que o documento esteja completamente carregado
+  document.addEventListener('DOMContentLoaded', function() {
+    // Verificar se o Supabase já está disponível globalmente
+    if (typeof supabaseJs === 'undefined') {
+      // Se não estiver disponível, carregar o script
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+      script.onload = function() {
+        // Inicializar o Supabase após o carregamento do script
+        initializeSupabase();
+      };
+      document.head.appendChild(script);
+    } else {
+      // Se já estiver disponível, inicializar o Supabase
+      initializeSupabase();
+    }
+    
+    // Função para inicializar o Supabase
+    function initializeSupabase() {
+      const supabaseUrl = 'https://qgqahdkthbfvldmdtcyk.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFncWFoZGt0aGJmdmxkbWR0Y3lrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTMzMjAyMDMsImV4cCI6MjAyODg5NjIwM30.09Jr64KP9clLTx7_gI9IGZ-0JrFSidQtOEroF-1mBy0';
+      
+      // Definir supabase globalmente
+      window.supabase = supabaseJs.createClient(supabaseUrl, supabaseKey);
+      
+      // Configurar os handlers de formulário
+      setupFormHandlers();
+      
+      console.log('Supabase inicializado com sucesso!');
+    }
+    
+    // Função para configurar os handlers de formulário
+    function setupFormHandlers() {
+      const loginForm = document.getElementById('login-form');
+      const loginEmail = document.getElementById('login-email');
+      const loginPassword = document.getElementById('login-password');
+      const loginError = document.getElementById('login-error');
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.getElementById('login-form');
-    const loginEmail = document.getElementById('login-email');
-    const loginPassword = document.getElementById('login-password');
-    const loginError = document.getElementById('login-error');
+      const registerForm = document.getElementById('register-form');
+      const registerName = document.getElementById('register-name');
+      const registerCpf = document.getElementById('register-cpf');
+      const registerPhone = document.getElementById('register-phone');
+      const registerType = document.getElementById('register-type');
+      const registerEmail = document.getElementById('register-email');
+      const registerPassword = document.getElementById('register-password');
+      const registerConfirmPassword = document.getElementById('register-confirm-password');
+      const registerDiscovery = document.getElementById('register-discovery');
+      const registerError = document.getElementById('register-error');
 
-    const registerForm = document.getElementById('register-form');
-    const registerName = document.getElementById('register-name');
-    const registerCpf = document.getElementById('register-cpf');
-    const registerPhone = document.getElementById('register-phone');
-    const registerType = document.getElementById('register-type');
-    const registerEmail = document.getElementById('register-email');
-    const registerPassword = document.getElementById('register-password');
-    const registerConfirmPassword = document.getElementById('register-confirm-password');
-    const registerDiscovery = document.getElementById('register-discovery');
-    const registerError = document.getElementById('register-error');
+      const showError = (element, message) => {
+        element.textContent = message;
+        element.style.display = 'block';
+        setTimeout(() => {
+          element.style.display = 'none';
+        }, 5000);
+      };
 
-    const showError = (element, message) => {
-      element.textContent = message;
-      element.style.display = 'block';
-      setTimeout(() => {
-        element.style.display = 'none';
-      }, 5000);
-    };
+      const showSuccess = (message) => {
+        const successElement = document.createElement('div');
+        successElement.className = 'success-message';
+        successElement.textContent = message;
+        document.body.appendChild(successElement);
+        setTimeout(() => {
+          document.body.removeChild(successElement);
+        }, 5000);
+      };
 
-    const showSuccess = (message) => {
-      const successElement = document.createElement('div');
-      successElement.className = 'success-message';
-      successElement.textContent = message;
-      document.body.appendChild(successElement);
-      setTimeout(() => {
-        document.body.removeChild(successElement);
-      }, 5000);
-    };
+      const validarCPF = (cpf) => {
+        cpf = cpf.replace(/[^\d]/g, '');
+        if (cpf.length !== 11) return false;
+        if (/^(\d)\1+$/.test(cpf)) return false;
 
-    const validarCPF = (cpf) => {
-      cpf = cpf.replace(/[^\d]/g, '');
-      if (cpf.length !== 11) return false;
-      if (/^(\d)\1+$/.test(cpf)) return false;
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+          soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = soma % 11;
+        let dv1 = resto < 2 ? 0 : 11 - resto;
+        if (parseInt(cpf.charAt(9)) !== dv1) return false;
 
-      let soma = 0;
-      for (let i = 0; i < 9; i++) {
-        soma += parseInt(cpf.charAt(i)) * (10 - i);
-      }
-      let resto = soma % 11;
-      let dv1 = resto < 2 ? 0 : 11 - resto;
-      if (parseInt(cpf.charAt(9)) !== dv1) return false;
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+          soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = soma % 11;
+        let dv2 = resto < 2 ? 0 : 11 - resto;
+        return parseInt(cpf.charAt(10)) === dv2;
+      };
 
-      soma = 0;
-      for (let i = 0; i < 10; i++) {
-        soma += parseInt(cpf.charAt(i)) * (11 - i);
-      }
-      resto = soma % 11;
-      let dv2 = resto < 2 ? 0 : 11 - resto;
-      return parseInt(cpf.charAt(10)) === dv2;
-    };
-
-    const validarFormularioCadastro = () => {
-      if (!registerName.value.trim()) {
-        showError(registerError, 'Nome completo é obrigatório');
-        return false;
-      }
-
-      const cpf = registerCpf.value.replace(/[^\d]/g, '');
-      if (!cpf || cpf.length !== 11 || !validarCPF(cpf)) {
-        showError(registerError, 'CPF inválido');
-        return false;
-      }
-
-      const phone = registerPhone.value.replace(/[^\d]/g, '');
-      if (!phone || phone.length < 10) {
-        showError(registerError, 'Telefone inválido');
-        return false;
-      }
-
-      if (!registerType.value) {
-        showError(registerError, 'Selecione o tipo de cadastro');
-        return false;
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(registerEmail.value)) {
-        showError(registerError, 'Email inválido');
-        return false;
-      }
-
-      if (registerPassword.value.length < 6) {
-        showError(registerError, 'A senha deve ter pelo menos 6 caracteres');
-        return false;
-      }
-
-      if (registerPassword.value !== registerConfirmPassword.value) {
-        showError(registerError, 'As senhas não coincidem');
-        return false;
-      }
-
-      return true;
-    };
-
-    if (loginForm) {
-      loginForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        console.log('Login form submitted');
-
-        const email = loginEmail.value;
-        const password = loginPassword.value;
-
-        if (!email || !password) {
-          showError(loginError, 'Email e senha são obrigatórios');
-          return;
+      const validarFormularioCadastro = () => {
+        if (!registerName.value.trim()) {
+          showError(registerError, 'Nome completo é obrigatório');
+          return false;
         }
 
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
+        const cpf = registerCpf.value.replace(/[^\d]/g, '');
+        if (!cpf || cpf.length !== 11 || !validarCPF(cpf)) {
+          showError(registerError, 'CPF inválido');
+          return false;
+        }
 
+        const phone = registerPhone.value.replace(/[^\d]/g, '');
+        if (!phone || phone.length < 10) {
+          showError(registerError, 'Telefone inválido');
+          return false;
+        }
+
+        if (!registerType.value) {
+          showError(registerError, 'Selecione o tipo de cadastro');
+          return false;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(registerEmail.value)) {
+          showError(registerError, 'Email inválido');
+          return false;
+        }
+
+        if (registerPassword.value.length < 6) {
+          showError(registerError, 'A senha deve ter pelo menos 6 caracteres');
+          return false;
+        }
+
+        if (registerPassword.value !== registerConfirmPassword.value) {
+          showError(registerError, 'As senhas não coincidem');
+          return false;
+        }
+
+        return true;
+      };
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          console.log('Login form submitted');
+
+          const email = loginEmail.value;
+          const password = loginPassword.value;
+
+          if (!email || !password) {
+            showError(loginError, 'Email e senha são obrigatórios');
+            return;
+          }
+
+          try {
+            const { data, error } = await window.supabase.auth.signInWithPassword({
+              email,
+              password,
+            });
+
+            if (error) throw error;
+
+            showSuccess('Login realizado com sucesso!');
+            setTimeout(() => {
+              window.location.href = '/index.html';
+            }, 1500);
+          } catch (error) {
+            console.error('Erro ao fazer login:', error);
+            showError(loginError, error.message || 'Erro ao fazer login');
+          }
+        });
+      }
+
+      if (registerForm) {
+        registerForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          console.log('Register form submitted');
+
+          if (!validarFormularioCadastro()) return;
+
+          try {
+            const { data: authData, error: authError } = await window.supabase.auth.signUp({
+              email: registerEmail.value,
+              password: registerPassword.value,
+            });
+
+            if (authError) throw authError;
+
+            const { error: profileError } = await window.supabase.from('profiles').insert([
+              {
+                id: authData.user.id,
+                nome_completo: registerName.value,
+                cpf: registerCpf.value.replace(/[^\d]/g, ''),
+                telefone: registerPhone.value.replace(/[^\d]/g, ''),
+                tipo_usuario: registerType.value,
+                como_descobriu: registerDiscovery.value || null,
+              },
+            ]);
+
+            if (profileError) throw profileError;
+
+            showSuccess('Cadastro realizado com sucesso! Você já pode fazer login.');
+            registerForm.reset();
+            switchTab('login');
+          } catch (error) {
+            console.error('Erro ao registrar usuário:', error);
+            showError(registerError, error.message || 'Erro ao registrar usuário');
+          }
+        });
+      }
+
+      const checkAuth = async () => {
+        try {
+          const { data, error } = await window.supabase.auth.getUser();
           if (error) throw error;
-
-          showSuccess('Login realizado com sucesso!');
-          setTimeout(() => {
+          if (data.user) {
             window.location.href = '/index.html';
-          }, 1500);
+          }
         } catch (error) {
-          console.error('Erro ao fazer login:', error);
-          showError(loginError, error.message || 'Erro ao fazer login');
+          console.error('Erro ao verificar autenticação:', error);
         }
-      });
-    }
+      };
 
-    if (registerForm) {
-      registerForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        console.log('Register form submitted');
+      checkAuth();
 
-        if (!validarFormularioCadastro()) return;
-
-        try {
-          const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: registerEmail.value,
-            password: registerPassword.value,
-          });
-
-          if (authError) throw authError;
-
-          const { error: profileError } = await supabase.from('profiles').insert([
-            {
-              id: authData.user.id,
-              nome_completo: registerName.value,
-              cpf: registerCpf.value.replace(/[^\d]/g, ''),
-              telefone: registerPhone.value.replace(/[^\d]/g, ''),
-              tipo_usuario: registerType.value,
-              como_descobriu: registerDiscovery.value || null,
-            },
-          ]);
-
-          if (profileError) throw profileError;
-
-          showSuccess('Cadastro realizado com sucesso! Você já pode fazer login.');
-          registerForm.reset();
-          switchTab('login');
-        } catch (error) {
-          console.error('Erro ao registrar usuário:', error);
-          showError(registerError, error.message || 'Erro ao registrar usuário');
-        }
-      });
-    }
-
-    const checkAuth = async () => {
-      try {
-        const { data, error } = await supabase.auth.getUser();
-        if (error) throw error;
-        if (data.user) {
-          window.location.href = '/index.html';
-        }
-      } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
+      if (registerCpf) {
+        registerCpf.addEventListener('input', function (e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 11) value = value.slice(0, 11);
+          if (value.length > 9) {
+            value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+          } else if (value.length > 6) {
+            value = value.replace(/^(\d{3})(\d{3})(\d{0,3}).*/, '$1.$2.$3');
+          } else if (value.length > 3) {
+            value = value.replace(/^(\d{3})(\d{0,3}).*/, '$1.$2');
+          }
+          e.target.value = value;
+        });
       }
-    };
 
-    checkAuth();
-
-    if (registerCpf) {
-      registerCpf.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        if (value.length > 9) {
-          value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
-        } else if (value.length > 6) {
-          value = value.replace(/^(\d{3})(\d{3})(\d{0,3}).*/, '$1.$2.$3');
-        } else if (value.length > 3) {
-          value = value.replace(/^(\d{3})(\d{0,3}).*/, '$1.$2');
-        }
-        e.target.value = value;
-      });
-    }
-
-    if (registerPhone) {
-      registerPhone.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 11) value = value.slice(0, 11);
-        if (value.length > 10) {
-          value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-        } else if (value.length > 6) {
-          value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-        } else if (value.length > 2) {
-          value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
-        }
-        e.target.value = value;
-      });
+      if (registerPhone) {
+        registerPhone.addEventListener('input', function (e) {
+          let value = e.target.value.replace(/\D/g, '');
+          if (value.length > 11) value = value.slice(0, 11);
+          if (value.length > 10) {
+            value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+          } else if (value.length > 6) {
+            value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+          } else if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2');
+          }
+          e.target.value = value;
+        });
+      }
     }
   });
 
@@ -250,4 +277,4 @@
     }
   }
 </script>
-      
+        
