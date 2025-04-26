@@ -1,1605 +1,1216 @@
-<!DOCTYPE html>
+tton class="btn <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ello Leilões</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Mais Informações - Ello Leilões</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #f26522;
-      --secondary-color: #2c3e50;
-      --accent-color: #e74c3c;
-      --light-gray: #f8f9fa;
-      --dark-gray: #343a40;
-      --success-color: #27ae60;
-      --warning-color: #f39c12;
-      --danger-color: #c0392b;
+      --primary-color: #2c3e50;
+      --secondary-color: #e74c3c;
+      --accent-color: #3498db;
+      --light-bg: #f8f9fa;
+      --dark-bg: #2c3e50;
       --text-color: #333;
+      --light-text: #f8f9fa;
       --border-radius: 8px;
-      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+    }
+    
+    .pulse-animation {
+      animation: pulse 1.5s infinite;
     }
 
     body {
-      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
       color: var(--text-color);
-      background-color: #f9f9f9;
-      padding-bottom: 30px;
+      line-height: 1.6;
     }
 
-    /* Header e Navegação */
+    .container {
+      max-width: 100%;
+      padding: 15px;
+    }
+
     .top-bar {
       background-color: var(--primary-color);
-      padding: 10px 15px;
-      color: white;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      box-shadow: var(--box-shadow);
       position: sticky;
       top: 0;
       z-index: 1000;
     }
 
-    .top-bar .login-btn {
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: var(--transition);
-      text-decoration: none;
-      color: white;
+    .top-bar img {
+      max-width: 180px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
 
-    .top-bar .login-btn:hover {
+    .card {
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      font-weight: 600;
+      padding: 12px 15px;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .carousel-container {
+      margin-bottom: 20px;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+    }
+
+    .carousel img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .carousel img:hover {
       opacity: 0.9;
     }
 
-    .top-bar img {
-      width: 20px;
-      margin-right: 8px;
-    }
-
-    .logo-container {
-      text-align: center;
-      padding: 15px 0;
-      background-color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .logo {
-      height: 70px;
-      max-width: 100%;
-      transition: var(--transition);
-    }
-
-    @media (max-width: 576px) {
-      .logo {
-        height: 50px;
-      }
-    }
-
-    /* Menu de Categorias ATUALIZADO */
-    .category-menu {
-      background-color: white;
-      padding: 15px 0;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      position: relative;
-      z-index: 100;
-    }
-
-    .icon-bar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .category-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-      transition: var(--transition);
-      padding: 10px;
-      border-radius: var(--border-radius);
-    }
-
-    .category-item:hover {
-      background-color: var(--light-gray);
-      transform: translateY(-3px);
-    }
-
-    .nav-icon {
+    .slick-prev, .slick-next {
+      z-index: 10;
       width: 40px;
       height: 40px;
-      margin-bottom: 8px;
-      transition: var(--transition);
     }
 
-    .category-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--secondary-color);
-      text-align: center;
+    .slick-prev {
+      left: 10px;
     }
 
-    /* Dropdown Menu ATUALIZADO (SÓ COM CLIQUE) */
-    .dropdown-menu {
-      min-width: 220px;
-      border: none;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
-      padding: 10px 0;
-      margin-top: 10px;
-      background-color: white;
-      position: absolute;
-      display: none;
-      z-index: 1050;
-      left: 50%;
-      transform: translateX(-50%);
+    .slick-next {
+      right: 10px;
     }
 
-    .dropdown.active .dropdown-menu {
-      display: block;
+    .slick-dots {
+      bottom: 10px;
     }
 
-    .dropdown-item {
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      color: var(--secondary-color);
-      transition: var(--transition);
-      background-color: white;
-      text-decoration: none;
-      display: block;
-    }
-
-    .dropdown-item:hover {
-      background-color: var(--light-gray);
-      color: var(--primary-color);
-    }
-
-    .dropdown-item i {
-      margin-right: 8px;
-      width: 16px;
-      text-align: center;
-    }
-
-    /* Seções de Conteúdo */
-    .section-title {
-      position: relative;
-      margin-bottom: 25px;
-      padding-bottom: 10px;
-      text-align: center;
-      font-weight: 700;
-      color: var(--secondary-color);
-      text-transform: uppercase;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 3px;
-      background-color: var(--primary-color);
-    }
-
-    .info-section {
-      background-color: white;
-      border-radius: var(--border-radius);
-      padding: 20px;
-      margin-bottom: 25px;
-      box-shadow: var(--box-shadow);
-    }
-
-    .info-section h4 {
-      color: var(--secondary-color);
-      font-weight: 700;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      font-size: 1.1rem;
-    }
-
-    .info-badge {
-      display: inline-flex;
-      align-items: center;
-      background-color: var(--light-gray);
-      padding: 5px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-    }
-
-    .info-icon {
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-    }
-
-    .info-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--secondary-color);
-    }
-
-    .info-text {
-      margin-top: 15px;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    /* Cards de Produtos */
-    .products-container {
-      padding: 0 15px;
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
-      margin-top: 20px;
-    }
-
-    .product-card {
-      background-color: white;
-      border-radius: var(--border-radius);
-      overflow: hidden;
-      box-shadow: var(--box-shadow);
-      transition: var(--transition);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .product-image-container {
-      position: relative;
-      overflow: hidden;
-      height: 200px;
-    }
-
-    .product-card img.product-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .product-card:hover img.product-image {
-      transform: scale(1.05);
-    }
-
-    .auction-info {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background-color: rgba(243, 156, 18, 0.9);
+    .slick-dots li button:before {
+      font-size: 12px;
       color: white;
-      border-radius: 20px;
-      padding: 5px 12px;
+      opacity: 0.7;
+    }
+
+    .slick-dots li.slick-active button:before {
+      color: white;
+      opacity: 1;
+    }
+
+    .btn-actions {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      gap: 15px;
+    }
+
+    .btn-actions button {
+      flex: 1;
+      padding: 12px;
       font-weight: 600;
-      font-size: 0.85rem;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
       display: flex;
       align-items: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      justify-content: center;
+      gap: 8px;
     }
 
-    .auction-info i {
-      margin-right: 5px;
+    .btn-actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .product-details {
-      padding: 20px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
+    .btn-success {
+      background-color: #27ae60;
+      border-color: #27ae60;
     }
 
-    .product-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: var(--secondary-color);
-      line-height: 1.4;
+    .btn-success:hover {
+      background-color: #2ecc71;
+      border-color: #2ecc71;
     }
 
-    .product-subtext {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
+    .btn-primary {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
     }
 
-    .product-subtext i {
-      margin-right: 5px;
-      color: var(--primary-color);
+    .btn-primary:hover {
+      background-color: #2980b9;
+      border-color: #2980b9;
     }
 
     .price-container {
-      margin-top: auto;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: var(--box-shadow);
     }
 
-    .initial-bid {
-      font-size: 1.0rem;
-      color: #2c3e50;
-      margin-bottom: 8px;
-      background-color: #f8f9fa;
-      padding: 6px 12px;
-      border-radius: 4px;
-      border-left: 3px solid var(--primary-color);
-      font-weight: 600;
+    .price-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
-    .market-price {
-      color: var(--accent-color);
-      font-weight: 700;
+    .product-price {
       font-size: 1.8rem;
-      margin-bottom: 5px;
+      font-weight: 700;
+      color: var(--secondary-color);
+    }
+
+    .frete-btn {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .frete-btn:hover {
+      background-color: #e9ecef;
+      color: var(--primary-color);
     }
 
     .product-note {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 15px;
-      font-style: italic;
-      border-bottom: 1px dotted #ddd;
-      padding-bottom: 5px;
-    }
-
-    .company-logo {
-      max-width: 120px;
-      max-height: 40px;
-      margin-bottom: 15px;
-    }
-
-    .action-buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-
-    .more-info {
-      display: inline-block;
-      padding: 8px 20px;
-      background-color: var(--primary-color);
-      color: white;
-      border-radius: var(--border-radius);
-      text-decoration: none;
+      font-size: 1rem;
       font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .description-text {
       font-size: 0.9rem;
-      transition: var(--transition);
-      text-align: center;
-      flex-grow: 1;
-    }
-
-    .more-info:hover {
-      background-color: #e55e14;
-      color: white;
-    }
-
-    .favorite-btn {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: var(--border-radius);
-      margin-left: 10px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .favorite-btn:hover {
-      background-color: #f8f9fa;
-      color: var(--accent-color);
+      color: #6c757d;
+      margin-top: 5px;
     }
 
     .warning-box {
-      background-color: #fff5f5;
-      color: var(--danger-color);
-      border: 1px solid #fad7d7;
+      background-color: #fff3cd;
+      color: #856404;
+      border-left: 4px solid #ffc107;
       border-radius: var(--border-radius);
-      padding: 10px;
+      padding: 12px;
       text-align: center;
       font-weight: 600;
+      margin: 20px 0;
+      font-size: 0.95rem;
+      box-shadow: var(--box-shadow);
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--accent-color);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-content {
+      font-size: 0.95rem;
+      color: #495057;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      background-color: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    .specifications {
+      font-size: 0.95rem;
+      color: #495057;
+      background-color: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    .specifications ul {
+      padding-left: 20px;
+      margin-bottom: 0;
+    }
+
+    .specifications li {
+      margin-bottom: 8px;
+    }
+
+    .specifications li:last-child {
+      margin-bottom: 0;
+    }
+
+    .btn-submit {
+      width: 100%;
       margin-top: 15px;
-      font-size: 0.85rem;
+      padding: 12px;
+      font-weight: 600;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-content {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      border-bottom: none;
+    }
+
+    .modal-header .modal-title {
+      color: var(--light-text);
+      font-weight: 600;
+    }
+
+    .modal-header .btn-close {
+      color: var(--light-text);
+      opacity: 0.8;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-body input, .modal-body select {
+      margin-bottom: 15px;
+      padding: 10px 12px;
+      border-radius: var(--border-radius);
+      border: 1px solid #ced4da;
+      transition: var(--transition);
+    }
+
+    .modal-body input:focus, .modal-body select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    }
+
+    .value-control {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .value-control button {
+      width: 25%;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .value-control input {
+      width: 50%;
+      text-align: center;
+      margin-bottom: 0;
+      font-weight: 600;
+    }
+
+    .countdown-box {
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 12px;
+      border-radius: var(--border-radius);
+      margin: 15px 0;
+      font-weight: 600;
+      box-shadow: var(--box-shadow);
+    }
+
+    .countdown-ativo {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    .countdown-encerrado {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .lance-atual {
+      background-color: #e9ecef;
+      padding: 12px;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 15px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .lance-atual span {
+      color: var(--accent-color);
+      font-size: 1.1rem;
+    }
+
+    .list-group-item {
+      padding: 12px 15px;
+      border-left: 3px solid var(--accent-color);
+      margin-bottom: 5px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+
+    .list-group-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      padding: 12px;
+      font-weight: 600;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
     }
 
-    .warning-box i {
-      margin-right: 8px;
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
-    /* Responsividade */
-    @media (max-width: 992px) {
-      .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      }
+    .highlight {
+      background-color: #fffacd;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .text-important {
+      font-weight: 600;
+      color: var(--primary-color);
     }
 
     @media (max-width: 768px) {
-      .icon-bar {
+      .carousel img {
+        height: 220px;
+      }
+
+      .product-price {
+        font-size: 1.5rem;
+      }
+
+      .btn-actions {
+        flex-direction: column;
         gap: 10px;
       }
-      
-      .nav-icon {
-        width: 35px;
-        height: 35px;
-      }
-      
-      .category-label {
-        font-size: 0.75rem;
-      }
-      
-      .section-title {
-        font-size: 1.3rem;
-      }
 
-      .dropdown-menu {
-        position: static;
+      .btn-actions button {
+        margin: 0;
         width: 100%;
-        box-shadow: none;
-        left: auto;
-        transform: none;
+      }
+
+      .price-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .frete-btn {
+        align-self: flex-start;
+      }
+
+      .modal-dialog {
+        margin: 10px;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      .countdown-box {
+        font-size: 0.85rem;
+      }
+
+      .top-bar {
+        padding: 10px;
+      }
+
+      .top-bar img {
+        max-width: 150px;
+      }
+
+      .card-body {
+        padding: 15px;
+      }
+
+      .section-content, .specifications {
+        padding: 12px;
       }
     }
 
-    @media (max-width: 576px) {
-      .products-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .icon-bar {
-        justify-content: space-around;
-      }
-      
-      .category-item {
-        padding: 5px;
-      }
-      
-      .nav-icon {
-        width: 30px;
-        height: 30px;
-      }
-      
-      .category-label {
-        font-size: 0.7rem;
-      }
-      
-      .product-title {
-        font-size: 1rem;
-      }
-      
-      .market-price {
-        font-size: 1.2rem;
+    @media (min-width: 768px) {
+      .container {
+        max-width: 720px;
+        margin: 0 auto;
       }
     }
 
-    /* Componentes Adicionais */
-    .countdown-timer {
-      display: flex;
-      justify-content: center;
-      margin: 15px 0;
+    @media (min-width: 992px) {
+      .container {
+        max-width: 960px;
+      }
     }
 
-    .countdown-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0 5px;
-      min-width: 50px;
-    }
-
-    .countdown-value {
-      background-color: var(--secondary-color);
-      color: white;
-      border-radius: 5px;
-      padding: 5px 10px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      width: 100%;
-      text-align: center;
-    }
-
-    .countdown-label {
-      font-size: 0.7rem;
-      margin-top: 5px;
-      color: #666;
-    }
-
-    .badge-featured {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background-color: var(--accent-color);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      z-index: 10;
-    }
-
-    .search-bar {
-      margin: 20px auto;
-      max-width: 600px;
-    }
-
-    .search-input {
-      border-radius: 30px;
-      padding: 12px 20px;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .search-btn {
-      border-radius: 30px;
-      padding: 8px 20px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-    }
-
-    /* Animações */
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    .pulse-animation {
-      animation: pulse 2s infinite;
-    }
-    
-    /* Estilo para itens ocultos pela pesquisa */
-    .hidden-item {
-      display: none !important;
-    }
-    
-    /* Estilo para leilão encerrado */
-    .auction-ended {
-      background-color: rgba(201, 48, 44, 0.9) !important;
-    }
-    
-    .auction-ended-message {
-      color: var(--danger-color);
-      font-weight: 700;
-      text-align: center;
-      margin: 15px 0;
-      padding: 10px;
-      border: 1px solid var(--danger-color);
-      border-radius: var(--border-radius);
-      background-color: #fff5f5;
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1140px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <!-- Barra Superior -->
   <div class="top-bar">
-    <a href="exemplo.com" class="login-btn">
-      <img src="ctticon.png" alt="Login" /> 
-      <span>ENTRAR / CADASTRAR</span>
+    <div class="container">
+      <img src="logo.png" alt="Logo Ello Leilões">
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="carousel-container">
+      <div class="carousel">
+        <div><img src="car1.png" alt="Imagem do Carro 1" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
+        <div><img src="car2.png" alt="Imagem do Carro 2" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
+        <div><img src="car3.png" alt="Imagem do Carro 3" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
+        <div><img src="car4.png" alt="Imagem do Carro 4" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
+      </div>
+    </div>
+
+    <!-- Temporizador -->
+    <div class="countdown-box" id="leilaoTimer"></div>
+
+    <!-- Lance Atual -->
+    <div class="lance-atual">
+      <i class="fas fa-gavel"></i> Lance atual atualizado: <span>R$ 20.000,00</span>
+    </div>
+
+    <div class="btn-actions">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#lanceModal">
+        <i class="fas fa-gavel"></i> Ofertar Lance
+      </button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adjModal">
+        <i class="fas fa-money-bill-wave"></i> Pagar Adjudicação
+      </button>
+    </div>
+
+    <!-- Preço e Frete -->
+    <div class="price-container">
+      <div class="price-header">
+        <div class="product-price">R$ 80.000,00</div>
+        <button class="btn btn-outline-secondary frete-btn" data-bs-toggle="modal" data-bs-target="#freteModal">
+          <i class="fas fa-truck"></i> Calcular Frete
+        </button>
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+      <div class="description-text">
+        Quando você paga o valor cheio e não vai a leilão.
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+
+    <!-- Botão de Lances Anteriores -->
+    <div class="text-center mt-3 mb-4">
+      <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#lancesModal">
+        <i class="fas fa-history"></i> Lances Anteriores
+      </button>
+    </div>
+
+    <!-- Informações do Veículo -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-car"></i> Jeep Compass Longitude 2018
+      </div>
+      <div class="card-body">
+        <div class="section-title">
+          <i class="fas fa-info-circle"></i> Sobre o Veículo
+        </div>
+        <div class="section-content">
+          Veículo recuperado por cooperativa de crédito do Banco Pan. Débito sobre parcela. Recebeu uma avaliação geral de <span class="text-important">9.1</span>, de acordo com o padrão da Instituição de Leiloeiros do Brasil.
+        </div>
+
+        <div class="section-title">
+          <i class="fas fa-file-alt"></i> Descrição
+        </div>
+        <div class="section-content">
+          O Jeep Compass 2018 é um modelo de cor branca, com design robusto e moderno. Ele apresenta excelente performance em todos os terrenos, ideal para quem busca conforto e segurança. Está em ótimas condições para uso imediato.
+        </div>
+
+        <div class="section-title">
+          <i class="fas fa-clipboard-list"></i> Especificações
+        </div>
+        <div class="specifications">
+          <ul>
+            <li><strong>Modelo:</strong> Jeep Compass Longitude</li>
+            <li><strong>Ano:</strong> 2018</li>
+            <li><strong>Motorização:</strong> 2.0 Turbo Diesel</li>
+            <li><strong>Potência:</strong> 170 cv</li>
+            <li><strong>Câmbio:</strong> Automático de 9 marchas</li>
+            <li><strong>Cor:</strong> Branco</li>
+            <li><strong>Combustível:</strong> Diesel</li>
+            <li><strong>Quilometragem:</strong> 80.000 km</li>
+            <li><strong>Placa:</strong> FINAL 5 (BA)</li>
+            <li><strong>Equipamentos:</strong> Ar condicionado, direção hidráulica, sistema de som, câmera de ré, etc.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informações Importantes -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-exclamation-circle"></i> Informações Importantes
+      </div>
+      <div class="card-body">
+        <div class="section-title">
+          <i class="fas fa-check-circle"></i> Coisas que você precisa saber
+        </div>
+        <div class="section-content">
+          <p>Você pode fazer uma oferta de lance ou adjudicação direta no caixa da GS ou via internet, seguindo as regras de compras online da GS.</p>
+          
+          <p>A retirada do veículo pode ser feita pessoalmente ou via entrega, com frete de <span class="highlight"><strong>3.5%</strong></span> sobre o valor do produto (ou o valor mínimo entre R$ 50 a R$ 1.000, dependendo do item ofertado).</p>
+          
+          <p>É obrigatório estar em dia com todos os compromissos fiscais e jurídicos para poder retirar o veículo do pátio da GS.</p>
+          
+          <p><strong>Se você for empreendedor do ramo de leilões</strong>, deverá pagar o imposto sobre compra. Este imposto <strong>não se aplica a pessoas físicas</strong>.</p>
+          
+          <p>Também é necessário cumprir obrigações jurídicas: <span class="highlight"><strong>o veículo deve ser transferido para o seu nome antes da retirada</strong></span> do pátio. Caso opte por entrega, essa transferência pode ser feita via <strong>procuração enviada em PDF</strong>.</p>
+          
+          <p>Para isso, você deve imprimir a procuração, ir ao cartório com seus documentos e autorizar a transferência para o seu nome.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn btn-outline-secondary back-btn">
+      <i class="fas fa-arrow-left"></i> Voltar para Listagem
     </a>
   </div>
 
-  <!-- Logo -->
-  <div class="logo-container">
-    <img src="logo.png" class="logo" alt="Ello Leilões" />
-  </div>
-
-  <!-- Menu de Categorias ATUALIZADO (CLIQUE PARA ABRIR) -->
-  <div class="category-menu">
-    <div class="container">
-      <div class="icon-bar">
-        <!-- Veículos -->
-        <div class="dropdown category-item" onclick="toggleDropdown(this)">
-          <div class="dropdown-toggle">
-            <img src="vermelho.png" class="nav-icon" alt="Veículos" />
-            <span class="category-label">VEÍCULOS</span>
-          </div>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
-            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
-            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
-          </div>
+  <!-- Modal Imagem -->
+  <div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Visualização Ampliada</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-
-        <!-- Materiais -->
-        <div class="dropdown category-item" onclick="toggleDropdown(this)">
-          <div class="dropdown-toggle">
-            <img src="amarelo.png" class="nav-icon" alt="Materiais" />
-            <span class="category-label">MATERIAIS</span>
-          </div>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
-            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
-            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
-          </div>
-        </div>
-
-        <!-- Imóveis -->
-        <div class="dropdown category-item" onclick="toggleDropdown(this)">
-          <div class="dropdown-toggle">
-            <img src="azul.png" class="nav-icon" alt="Imóveis" />
-            <span class="category-label">IMÓVEIS</span>
-          </div>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
-            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
-            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
-          </div>
-        </div>
-
-        <!-- Licitações -->
-        <div class="dropdown category-item" onclick="toggleDropdown(this)">
-          <div class="dropdown-toggle">
-            <img src="cinza.png" class="nav-icon" alt="Licitações" />
-            <span class="category-label">LICITAÇÕES</span>
-          </div>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
-            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
-            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
-          </div>
-        </div>
-
-        <!-- Eletrônicos -->
-        <div class="dropdown category-item" onclick="toggleDropdown(this)">
-          <div class="dropdown-toggle">
-            <img src="preto.png" class="nav-icon" alt="Eletrônicos" />
-            <span class="category-label">ELETRÔNICOS</span>
-          </div>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
-            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
-            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
-          </div>
+        <div class="modal-body text-center">
+          <img src="car1.png" class="img-fluid" alt="Imagem grande">
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Barra de Pesquisa -->
-  <div class="container">
-    <div class="search-bar">
-      <div class="input-group">
-        <input type="text" class="form-control search-input" placeholder="Buscar lotes, veículos, imóveis..." aria-label="Buscar" id="search-input">
-        <button class="btn search-btn" type="button" id="search-button"><i class="fas fa-search"></i> Buscar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Seção Informativa -->
-  <div class="container">
-    <div class="info-section">
-      <h4>BEM-VINDO</h4>
-      <div class="info-badge">
-        <img src="aten.png" alt="Informativo" class="info-icon" />
-        <span class="info-label">Informativo</span>
-      </div>
-      <p class="info-text">
-        26º Leilão das Cooperativas de Crédito do Grupo Embracredit.<br>
-        1º Leilão do Primeiro Semestre.
-      </p>
-    </div>
-  </div>
-
-  <!-- Lotes em Destaque -->
-  <div class="container">
-    <h2 class="section-title">Lotes em Destaque</h2>
-    
-    <div class="products-container">
-      <div class="products-grid">
-        <!-- Produto 1 (Compass) -->
-        <div class="product-card" data-auction-date="2025-04-29T14:00:00">
-          <div class="product-image-container">
-            <span class="badge-featured">Destaque</span>
-            <img src="car0.png" alt="Jeep Compass" class="product-image" />
-            <div class="auction-info">
-              <i class="fas fa-gavel"></i> 29/04 14:00
-            </div>
-          </div>
-          <div class="product-details">
-            <div class="product-title">
-              FIAT UNO WAY 1.0 2015/2015
-            </div>
-            <div class="product-subtext">
-              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-            </div>
-            
-            <!-- Contador regressivo -->
-            <div class="countdown-timer">
-              <div class="countdown-item">
-                <div class="countdown-value days">00</div>
-                <div class="countdown-label">Dias</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value hours">00</div>
-                <div class="countdown-label">Horas</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value minutes">00</div>
-                <div class="countdown-label">Min</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value seconds">00</div>
-                <div class="countdown-label">Seg</div>
-              </div>
-            </div>
-            
-                        <div class="price-container">
-              <div class="initial-bid">
-                Lance Atual: <strong>R$ 9.000</strong>
-              </div>
-              <div class="market-price">
-                R$ 13.500
-              </div>
-              <div class="product-note">
-                Adjudificação Direta
-              </div>
-            </div>
-            
-            <img src="bkpan.png" alt="Empresa" class="company-logo" />
-            
-            <div class="action-buttons">
-              <a href="car283648583.html" class="more-info">Ver Detalhes</a>
-              <button class="favorite-btn">
-                <i class="far fa-heart"></i>
-              </button>
-            </div>
-            
-                      <div class="warning-box">
-              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-            </div>
-          </div>
+  <!-- Modal Lance -->
+  <div class="modal fade" id="lanceModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-gavel"></i> Ofertar Lance</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        
-        <!-- Produto 2 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car2.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      VOLKSWAGEN TIGUAN 2.0 TSI 2010/2010
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 23.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 29.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car28462946483.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-        
-        <!-- Produto 3 -->
-        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
-          <div class="product-image-container">
-            <img src="car3.png" alt="Veículo" class="product-image" />
-            <div class="auction-info">
-              <i class="fas fa-gavel"></i> 29/04 15:30
-            </div>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Você receberá instruções de compra e ofertas de outras pessoas no WhatsApp.
           </div>
-          <div class="product-details">
-            <div class="product-title">
-              FIAT UNO MILLE ECONOMY 2013/2013
-            </div>
-            <div class="product-subtext">
-              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-            </div>
-            
-            <!-- Contador regressivo -->
-            <div class="countdown-timer">
-              <div class="countdown-item">
-                <div class="countdown-value days">00</div>
-                <div class="countdown-label">Dias</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value hours">00</div>
-                <div class="countdown-label">Horas</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value minutes">00</div>
-                <div class="countdown-label">Min</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value seconds">00</div>
-                <div class="countdown-label">Seg</div>
-              </div>
-            </div>
-            
-            <div class="price-container">
-              <div class="initial-bid">
-                Lance Atual: <strong>R$ 4.500</strong>
-              </div>
-              <div class="market-price">
-                R$ 8.000
-              </div>
-              <div class="product-note">
-                Adjudificação Direta
-              </div>
-            </div>
-            
-            <img src="bkpan.png" alt="Empresa" class="company-logo" />
-            
-            <div class="action-buttons">
-              <a href="car2852946294.html" class="more-info">Ver Detalhes</a>
-              <button class="favorite-btn">
-                <i class="far fa-heart"></i>
-              </button>
-            </div>
-            
-            <div class="warning-box">
-              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          <input type="text" class="form-control" id="lanceName" placeholder="Nome completo" />
+          <input type="tel" class="form-control" id="lancePhone" placeholder="Telefone com WhatsApp" />
+          <input type="text" class="form-control" id="lanceAfiliacao" placeholder="Número de Afiliação (opcional)" />
+          <input type="text" class="form-control" id="lanceConvite" placeholder="Convite (opcional)" />
 
-    <!-- Produto 4 -->
-        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
-          <div class="product-image-container">
-            <img src="car4.png" alt="Veículo" class="product-image" />
-            <div class="auction-info">
-              <i class="fas fa-gavel"></i> 29/04 15:30
-            </div>
+          <label class="form-label mt-3"><i class="fas fa-money-bill-wave"></i> Valor da Oferta</label>
+          <div class="value-control">
+            <button class="btn btn-outline-secondary" onclick="alterarValor(-500)">-500</button>
+            <input type="number" id="valorOferta" class="form-control" value="20000" />
+            <button class="btn btn-outline-secondary" onclick="alterarValor(500)">+500</button>
           </div>
-          <div class="product-details">
-            <div class="product-title">
-              FIAT GRAND SIENA ESSENCE 1.6 2014/2015
-            </div>
-            <div class="product-subtext">
-              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-            </div>
-            
-            <!-- Contador regressivo -->
-            <div class="countdown-timer">
-              <div class="countdown-item">
-                <div class="countdown-value days">00</div>
-                <div class="countdown-label">Dias</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value hours">00</div>
-                <div class="countdown-label">Horas</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value minutes">00</div>
-                <div class="countdown-label">Min</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value seconds">00</div>
-                <div class="countdown-label">Seg</div>
-              </div>
-            </div>
-            
-            <div class="price-container">
-              <div class="initial-bid">
-                Lance Atual: <strong>R$ 12.500</strong>
-              </div>
-              <div class="market-price">
-                R$ 17.000
-              </div>
-              <div class="product-note">
-                Adjudificação Direta
-              </div>
-            </div>
-            
-            <img src="bkpan.png" alt="Empresa" class="company-logo" />
-            
-            <div class="action-buttons">
-              <a href="car2829573925.html" class="more-info">Ver Detalhes</a>
-              <button class="favorite-btn">
-                <i class="far fa-heart"></i>
-              </button>
-            </div>
-            
-            <div class="warning-box">
-              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-            </div>
-          </div>
-        </div>
-      </div>
-</div>
 
-  <!-- Produto 5 -->
-        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
-          <div class="product-image-container">
-            <img src="car5.png" alt="Veículo" class="product-image" />
-            <div class="auction-info">
-              <i class="fas fa-gavel"></i> 29/04 15:30
-            </div>
-          </div>
-          <div class="product-details">
-            <div class="product-title">
-              HONDA CG 160 START 2018/2019
-            </div>
-            <div class="product-subtext">
-              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-            </div>
-            
-            <!-- Contador regressivo -->
-            <div class="countdown-timer">
-              <div class="countdown-item">
-                <div class="countdown-value days">00</div>
-                <div class="countdown-label">Dias</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value hours">00</div>
-                <div class="countdown-label">Horas</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value minutes">00</div>
-                <div class="countdown-label">Min</div>
-              </div>
-              <div class="countdown-item">
-                <div class="countdown-value seconds">00</div>
-                <div class="countdown-label">Seg</div>
-              </div>
-            </div>
-            
-            <div class="price-container">
-              <div class="initial-bid">
-                Lance Atual: <strong>R$ 3.500</strong>
-              </div>
-              <div class="market-price">
-                R$ 8.000
-              </div>
-              <div class="product-note">
-                Adjudificação Direta
-              </div>
-            </div>
-            
-            <img src="bkpan.png" alt="Empresa" class="company-logo" />
-            
-            <div class="action-buttons">
-              <a href="car2852947495.html" class="more-info">Ver Detalhes</a>
-              <button class="favorite-btn">
-                <i class="far fa-heart"></i>
-              </button>
-            </div>
-            
-            <div class="warning-box">
-              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-            </div>
-          </div>
-        </div>
-      </div>
-</div>
-
-  <!-- Produto 6 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car6.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      HONDA CG 160 FAN 2023/2023
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 6.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 11.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car2853947162.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-
-  <!-- Produto 7 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car7.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      HONDA BIZ 125 120 2020/2021
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 6.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 10.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car289472610.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-
-  <!-- Produto 8 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car8.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      HONDA XRE 300 ABS 2023/2023
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Retornar lotes
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 15.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 21.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car284958716.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-
-  <!-- Produto 9 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car9.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      YAMAHA YBR150 FACTOR E 2016/2016
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 2.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 6.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car284920147.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-
-<!-- Produto 10 -->
-<div class="product-card" data-auction-date="2025-04-29T15:30:00">
-  <div class="product-image-container">
-    <img src="car10.png" alt="Veículo" class="product-image" />
-    <div class="auction-info">
-      <i class="fas fa-gavel"></i> 29/04 15:30
-    </div>
-  </div>
-  <div class="product-details">
-    <div class="product-title">
-      FIAT PULSE ABARTH 270 2023/2023
-    </div>
-    <div class="product-subtext">
-      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
-    </div>
-    
-    <!-- Contador regressivo -->
-    <div class="countdown-timer">
-      <div class="countdown-item">
-        <div class="countdown-value days">00</div>
-        <div class="countdown-label">Dias</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value hours">00</div>
-        <div class="countdown-label">Horas</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value minutes">00</div>
-        <div class="countdown-label">Min</div>
-      </div>
-      <div class="countdown-item">
-        <div class="countdown-value seconds">00</div>
-        <div class="countdown-label">Seg</div>
-      </div>
-    </div>
-    
-    <div class="price-container">
-      <div class="initial-bid">
-        Lance Atual: <strong>R$ 63.000</strong>
-      </div>
-      <div class="market-price">
-        R$ 80.000
-      </div>
-      <div class="product-note">
-        Adjudicação Direta
-      </div>
-    </div>
-    
-    <img src="bkpan.png" alt="Empresa" class="company-logo" />
-    
-    <div class="action-buttons">
-      <a href="car284957391.html" class="more-info">Ver Detalhes</a>
-      <button class="favorite-btn">
-        <i class="far fa-heart"></i>
-      </button>
-    </div>
-    
-    <div class="warning-box">
-      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
-    </div>
-  </div>
-</div>
-  
-    <!-- Botão Ver Mais -->
-    <div class="text-center mt-4">
-      <a href="todos-lotes.html" class="btn btn-outline-primary">Ver Todos os Lotes</a>
-    </div>
-  </div>
-
-  <!-- Próximos Leilões -->
-  <div class="container mt-5">
-    <h2 class="section-title">Próximos Leilões</h2>
-    
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Leilão de Veículos Premium</h5>
-            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 21/04/2025 - 14:00</p>
-            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
-            <p class="card-text">Mais de 50 veículos de luxo com lances iniciais a partir de R$ 15.000.</p>
-            <a href="exemplo4.html" class="btn btn-sm btn-primary">Saiba Mais</a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Leilão de Imóveis Residenciais</h5>
-            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 25/08/2023 - 10:00</p>
-            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
-            <p class="card-text">Apartamentos e casas em diversas regiões com descontos de até 40%.</p>
-            <a href="exemplo5.html" class="btn btn-sm btn-primary">Saiba Mais</a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title">Leilão de Equipamentos Eletrônicos</h5>
-            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 28/08/2023 - 15:30</p>
-            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
-            <p class="card-text">Notebooks, smartphones e outros equipamentos com ótimos preços.</p>
-            <a href="exemplo6.html" class="btn btn-sm btn-primary">Saiba Mais</a>
-          </div>
+          <button class="btn btn-success btn-submit" id="enviarLanceBtn"><i class="fas fa-paper-plane"></i> Enviar Oferta</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Rodapé -->
-  <footer class="bg-dark text-white mt-5 py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <h5>Ello Leilões</h5>
-          <p class="small">Especialistas em leilões extrajudiciais e judiciais desde 2010.</p>
-          <p class="small">CNPJ: 00.000.000/0001-00</p>
+
+  <!-- Modal Adjudicação -->
+  <div class="modal fade" id="adjModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-money-bill-wave"></i> Pagar Adjudicação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="col-md-4 mb-3">
-          <h5>Links Úteis</h5>
-          <ul class="list-unstyled">
-            <li><a href="exemplo.html" class="text-white">Como Participar</a></li>
-            <li><a href="exemplo.html" class="text-white">Termos e Condições</a></li>
-            <li><a href="exemplo.html" class="text-white">Política de Privacidade</a></li>
-            <li><a href="exemplo.html" class="text-white">Contato</a></li>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Você receberá instruções de compra pelo WhatsApp.
+          </div>
+          <input type="text" class="form-control" id="adjName" placeholder="Nome completo" />
+          <input type="tel" class="form-control" id="adjPhone" placeholder="Telefone com WhatsApp" />
+          <input type="text" class="form-control" id="adjAfiliacao" placeholder="Número de Afiliação (opcional)" />
+          <input type="text" class="form-control" id="adjConvite" placeholder="Convite (opcional)" />
+
+          <label class="form-label mt-3"><i class="fas fa-tag"></i> Valor da Adjudicação</label>
+          <input type="text" class="form-control" id="valorAdjudicacao" value="R$ 80.000,00" readonly />
+
+          <button class="btn btn-primary btn-submit" id="enviarAdjBtn"><i class="fas fa-paper-plane"></i> Enviar Solicitação</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Calcular Frete -->
+  <div class="modal fade" id="freteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-truck"></i> Simular Frete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info mb-3">
+            <i class="fas fa-info-circle"></i> O frete é realizado pela própria GS Leilões.
+          </div>
+          <input type="number" id="valorProduto" class="form-control mb-3" placeholder="Valor do produto (R$)" />
+          <input type="text" id="cidadeDestino" class="form-control mb-3" placeholder="Cidade" />
+          <select id="estadoDestino" class="form-select mb-3">
+            <option value="">Selecione o estado</option>
+            <option value="norte">Norte</option>
+            <option value="sul">Sul</option>
+            <option value="sudeste">Sudeste</option>
+            <option value="nordeste">Nordeste</option>
+            <option value="centro-oeste">Centro-Oeste</option>
+          </select>
+          <button class="btn btn-primary w-100" id="calcularFreteBtn">
+            <i class="fas fa-calculator"></i> Calcular
+          </button>
+          <div id="resultadoFrete" class="mt-3 alert alert-success d-none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Lances Anteriores -->
+  <div class="modal fade" id="lancesModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-history"></i> Lances Anteriores</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group">
+            <li class="list-group-item"><i class="fas fa-user-circle"></i> #072087 ofertou <strong>R$ 44.500,00</strong></li>
+            <li class="list-group-item"><i class="fas fa-user-circle"></i> #056901 ofertou <strong>R$ 42.000,00</strong></li>
+            <li class="list-group-item"><i class="fas fa-user-circle"></i> #034188 ofertou <strong>R$ 40.000,00</strong></li>
+            <li class="list-group-item"><i class="fas fa-user-circle"></i> #021477 ofertou <strong>R$ 37.500,00</strong></li>
+            <li class="list-group-item"><i class="fas fa-user-circle"></i> #011200 ofertou <strong>R$ 35.000,00</strong></li>
           </ul>
         </div>
-        <div class="col-md-4">
-          <h5>Contato</h5>
-          <p class="small"><i class="fas fa-phone me-2"></i> (11) 0000-0000</p>
-          <p class="small"><i class="fas fa-envelope me-2"></i> contato@elloleiloes.com.br</p>
-        </div>
-      </div>
-      <hr class="my-3">
-      <div class="text-center small">
-        &copy; 2023 Ello Leilões. Todos os direitos reservados.
       </div>
     </div>
-  </footer>
+  </div>
 
-  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Função para alternar o dropdown
-    function toggleDropdown(element) {
-      // Fecha todos os outros dropdowns primeiro
-      document.querySelectorAll('.dropdown').forEach(drop => {
-        if (drop !== element) {
-          drop.classList.remove('active');
+  
+  <!-- Firebase -->
+  <script type="module">
+    // Importar as funções e serviços do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_WGj92eLXpZkFcECGij4q6q2nOHHBNaU",
+      authDomain: "magistro-3e355.firebaseapp.com",
+      projectId: "magistro-3e355",
+      storageBucket: "magistro-3e355.firebasestorage.app",
+      messagingSenderId: "282094079424",
+      appId: "1:282094079424:web:75251b079963f3d2c70c25",
+      measurementId: "G-W6H88EPZKN"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    // Função para enviar lance para o Firebase
+    async function enviarLance() {
+      const form = document.querySelector('#lanceModal .modal-body');
+      
+      // Obter elementos do formulário
+      const nomeInput = document.getElementById('lanceName');
+      const telefoneInput = document.getElementById('lancePhone');
+      const afiliacaoInput = document.getElementById('lanceAfiliacao');
+      const conviteInput = document.getElementById('lanceConvite');
+      const valorOfertaInput = document.getElementById('valorOferta');
+      
+      // Validação básica
+      let valid = true;
+      const requiredInputs = [nomeInput, telefoneInput];
+      
+      requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('is-invalid');
+          valid = false;
+        } else {
+          input.classList.remove('is-invalid');
         }
       });
       
-      // Alterna o estado do dropdown clicado
-      element.classList.toggle('active');
-      
-      // Fecha o dropdown se clicar fora
-      if (element.classList.contains('active')) {
-        document.addEventListener('click', function closeDropdown(e) {
-          if (!element.contains(e.target)) {
-            element.classList.remove('active');
-            document.removeEventListener('click', closeDropdown);
+      if (!valid) {
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos obrigatórios.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
           }
+        }, 3000);
+        
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = nomeInput.value;
+      const telefone = telefoneInput.value;
+      const afiliacao = afiliacaoInput.value;
+      const convite = conviteInput.value;
+      const valorOferta = valorOfertaInput.value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = document.getElementById('enviarLanceBtn');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "lances"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorOferta: parseFloat(valorOferta),
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
         });
+        
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-success');
+        btnSubmit.classList.add('btn-outline-success');
+        
+        // Fechar modal após um tempo
+        setTimeout(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('lanceModal'));
+          modal.hide();
+          
+          // Resetar botão após fechar
+          setTimeout(() => {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('btn-outline-success');
+            btnSubmit.classList.add('btn-success');
+            
+            // Limpar formulário
+            nomeInput.value = '';
+            telefoneInput.value = '';
+            afiliacaoInput.value = '';
+            conviteInput.value = '';
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar lance:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro ao enviar lance. Tente novamente.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
+          }
+        }, 3000);
       }
     }
-
-    // Script para contador regressivo
-    document.addEventListener('DOMContentLoaded', function() {
-      // Função para calcular o tempo restante
-      function getTimeRemaining(endtime) {
-        const total = Date.parse(endtime) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-        const days = Math.floor(total / (1000 * 60 * 60 * 24));
-        
-        return {
-          total,
-          days,
-          hours,
-          minutes,
-          seconds
-        };
-      }
-      
-      // Função para inicializar o relógio
-      function initializeClock(productCard) {
-        const auctionDateStr = productCard.getAttribute('data-auction-date');
-        const auctionDate = new Date(auctionDateStr);
-        
-        const daysSpan = productCard.querySelector('.days');
-        const hoursSpan = productCard.querySelector('.hours');
-        const minutesSpan = productCard.querySelector('.minutes');
-        const secondsSpan = productCard.querySelector('.seconds');
-        const auctionInfo = productCard.querySelector('.auction-info');
-        const countdownTimer = productCard.querySelector('.countdown-timer');
-        
-        // Verificar se o leilão já terminou
-        const now = new Date();
-        if (auctionDate <= now) {
-          // Leilão encerrado
-          if (auctionInfo) {
-            auctionInfo.classList.add('auction-ended');
-            auctionInfo.innerHTML = '<i class="fas fa-gavel"></i> Encerrado';
-          }
-          
-          if (countdownTimer) {
-            countdownTimer.innerHTML = '<div class="auction-ended-message">Leilão Encerrado</div>';
-          }
-          return;
-        }
-        
-        function updateClock() {
-          const t = getTimeRemaining(auctionDate);
-          
-          if (daysSpan) daysSpan.innerHTML = t.days < 10 ? '0' + t.days : t.days;
-          if (hoursSpan) hoursSpan.innerHTML = t.hours < 10 ? '0' + t.hours : t.hours;
-          if (minutesSpan) minutesSpan.innerHTML = t.minutes < 10 ? '0' + t.minutes : t.minutes;
-          if (secondsSpan) secondsSpan.innerHTML = t.seconds < 10 ? '0' + t.seconds : t.seconds;
-          
-          if (t.total <= 0) {
-            clearInterval(timeinterval);
-            
-            // Leilão encerrado
-            if (auctionInfo) {
-              auctionInfo.classList.add('auction-ended');
-              auctionInfo.innerHTML = '<i class="fas fa-gavel"></i> Encerrado';
-            }
-            
-            if (countdownTimer) {
-              countdownTimer.innerHTML = '<div class="auction-ended-message">Leilão Encerrado</div>';
-            }
-          }
-        }
-        
-        updateClock(); // Executar uma vez imediatamente
-        const timeinterval = setInterval(updateClock, 1000);
-        productCard.setAttribute('data-interval-id', timeinterval); // Armazenar o ID do intervalo
-      }
-      
-      // Inicializar todos os contadores regressivos
-      const productCards = document.querySelectorAll('.product-card[data-auction-date]');
-      productCards.forEach(function(card) {
-        initializeClock(card);
-      });
-    });
     
-    // Script para favoritar
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const icon = this.querySelector('i');
-        if (icon.classList.contains('far')) {
-          icon.classList.remove('far');
-          icon.classList.add('fas');
-          icon.style.color = '#e74c3c';
+    // Função para enviar adjudicação para o Firebase
+    async function enviarAdjudicacao() {
+      const form = document.querySelector('#adjModal .modal-body');
+      
+      // Obter elementos do formulário
+      const nomeInput = document.getElementById('adjName');
+      const telefoneInput = document.getElementById('adjPhone');
+      const afiliacaoInput = document.getElementById('adjAfiliacao');
+      const conviteInput = document.getElementById('adjConvite');
+      
+      // Validação básica
+      let valid = true;
+      const requiredInputs = [nomeInput, telefoneInput];
+      
+      requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+          input.classList.add('is-invalid');
+          valid = false;
         } else {
-          icon.classList.remove('fas');
-          icon.classList.add('far');
-          icon.style.color = '';
+          input.classList.remove('is-invalid');
         }
       });
-    });
-    
-    // Script para funcionalidade de pesquisa
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchButton = document.getElementById('search-button');
-      const searchInput = document.getElementById('search-input');
       
-      if (searchButton && searchInput) {
-        searchButton.addEventListener('click', function() {
-          const searchTerm = searchInput.value.trim().toLowerCase();
-          if (searchTerm) {
-            // Seleciona todos os elementos que podem ser pesquisados
-            const searchableItems = document.querySelectorAll('.product-card');
-            let resultsFound = false;
-            
-            searchableItems.forEach(item => {
-              // Busca no texto do item
-              const itemText = item.textContent.toLowerCase();
-              
-              if (itemText.includes(searchTerm)) {
-                item.classList.remove('hidden-item');
-                resultsFound = true;
-              } else {
-                item.classList.add('hidden-item');
-              }
-            });
-            
-            // Se não encontrou resultados, pode mostrar uma mensagem
-            if (!resultsFound) {
-              alert('Nenhum resultado encontrado para: ' + searchTerm);
-            }
-          } else {
-            // Se a pesquisa estiver vazia, mostrar todos os itens
-            const searchableItems = document.querySelectorAll('.product-card');
-            searchableItems.forEach(item => {
-              item.classList.remove('hidden-item');
-            });
+      if (!valid) {
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos obrigatórios.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
           }
+        }, 3000);
+        
+        return;
+      }
+      
+      // Obter dados do formulário
+      const nome = nomeInput.value;
+      const telefone = telefoneInput.value;
+      const afiliacao = afiliacaoInput.value;
+      const convite = conviteInput.value;
+      
+      // Mostrar feedback de carregamento
+      const btnSubmit = document.getElementById('enviarAdjBtn');
+      const originalText = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+      btnSubmit.disabled = true;
+      
+      try {
+        // Salvar no Firebase
+        await addDoc(collection(db, "adjudicacoes"), {
+          nome: nome,
+          telefone: telefone,
+          afiliacao: afiliacao || null,
+          convite: convite || null,
+          valorAdjudicacao: 80000,
+          produto: "Jeep Compass Longitude 2018",
+          dataCriacao: serverTimestamp()
         });
         
-        // Permitir pesquisa ao pressionar Enter
-        searchInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            searchButton.click();
+        // Feedback de sucesso
+        btnSubmit.innerHTML = '<i class="fas fa-check"></i> Enviado com sucesso!';
+        btnSubmit.classList.remove('btn-primary');
+        btnSubmit.classList.add('btn-outline-primary');
+        
+        // Fechar modal após um tempo
+        setTimeout(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('adjModal'));
+          modal.hide();
+          
+          // Resetar botão após fechar
+          setTimeout(() => {
+            btnSubmit.innerHTML = originalText;
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('btn-outline-primary');
+            btnSubmit.classList.add('btn-primary');
+            
+            // Limpar formulário
+            nomeInput.value = '';
+            telefoneInput.value = '';
+            afiliacaoInput.value = '';
+            conviteInput.value = '';
+          }, 500);
+        }, 1500);
+        
+      } catch (error) {
+        console.error("Erro ao salvar adjudicação:", error);
+        btnSubmit.innerHTML = originalText;
+        btnSubmit.disabled = false;
+        
+        // Remover alertas anteriores
+        const alertaAnterior = form.querySelector('.alert-danger');
+        if (alertaAnterior) {
+          alertaAnterior.remove();
+        }
+        
+        // Adicionar novo alerta
+        const alerta = document.createElement('div');
+        alerta.className = 'alert alert-danger mb-3';
+        alerta.innerHTML = '<i class="fas fa-exclamation-circle"></i> Erro ao enviar solicitação. Tente novamente.';
+        form.insertBefore(alerta, form.firstChild);
+        
+        setTimeout(() => {
+          if (alerta.parentNode === form) {
+            alerta.remove();
           }
-        });
+        }, 3000);
       }
+    }
+    
+    // Função para calcular frete
+    function calcularFrete() {
+      const valor = parseFloat(document.getElementById("valorProduto").value);
+      const cidade = document.getElementById("cidadeDestino").value;
+      const estado = document.getElementById("estadoDestino").value;
+      const resultado = document.getElementById("resultadoFrete");
+
+      if (isNaN(valor) || !estado || !cidade) {
+        resultado.innerHTML = "<i class='fas fa-exclamation-circle'></i> Preencha todos os campos corretamente.";
+        resultado.classList.remove("d-none", "alert-success");
+        resultado.classList.add("alert-danger");
+        return;
+      }
+
+      // Mostrar indicador de carregamento
+      resultado.innerHTML = "<div class='text-center'><span class='spinner-border spinner-border-sm' role='status'></span> Calculando...</div>";
+      resultado.classList.remove("d-none", "alert-danger", "alert-success");
+      
+      // Simular tempo de processamento
+      setTimeout(function() {
+        let freteBase = valor >= 25000 ? valor * 0.045 : 1000;
+
+        const acrescimos = {
+          "norte": 0.005,
+          "sul": 0.01,
+          "sudeste": 0.012,
+          "nordeste": 0.007,
+          "centro-oeste": 0.019
+        };
+
+        freteBase += freteBase * acrescimos[estado];
+        
+        // Adicionar variação baseada no comprimento do nome da cidade (simulação)
+        const variacaoCidade = (cidade.length % 5) * 0.001;
+        freteBase = freteBase * (1 + variacaoCidade);
+        
+        const valorFormatado = freteBase.toFixed(2).replace(".", ",");
+        const prazoEntrega = 3 + (estado === "norte" || estado === "nordeste" ? 2 : 0);
+        
+        resultado.innerHTML = `
+          <div class="text-center mb-2"><i class="fas fa-check-circle text-success fa-2x"></i></div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Valor do frete:</span>
+            <strong>R$ ${valorFormatado}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Prazo de entrega:</span>
+            <strong>${prazoEntrega} a ${prazoEntrega + 2} dias úteis</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Cidade/Estado:</span>
+            <strong>${cidade}/${estado.toUpperCase()}</strong>
+          </div>
+        `;
+        resultado.classList.remove("d-none", "alert-danger");
+        resultado.classList.add("alert-success");
+        
+        // Salvar cálculo no Firebase
+        try {
+          addDoc(collection(db, "calculos_frete"), {
+            valorProduto: valor,
+            cidade: cidade,
+            estado: estado,
+            valorFrete: freteBase,
+            dataCriacao: serverTimestamp()
+          });
+        } catch (error) {
+          console.error("Erro ao salvar cálculo de frete:", error);
+        }
+      }, 1500);
+    }
+    
+    // Exportar funções para o escopo global
+    window.enviarLance = enviarLance;
+    window.enviarAdjudicacao = enviarAdjudicacao;
+    window.calcularFrete = calcularFrete;
+    
+    // Inicializar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configurar os botões para chamar as funções do Firebase
+      const lanceBotao = document.getElementById('enviarLanceBtn');
+      if (lanceBotao) {
+        lanceBotao.addEventListener('click', enviarLance);
+      }
+      
+      const adjBotao = document.getElementById('enviarAdjBtn');
+      if (adjBotao) {
+        adjBotao.addEventListener('click', enviarAdjudicacao);
+      }
+      
+      const freteBotao = document.getElementById('calcularFreteBtn');
+      if (freteBotao) {
+        freteBotao.addEventListener('click', calcularFrete);
+      }
+      
+      // Iniciar o temporizador
+      atualizarTemporizador();
+      setInterval(atualizarTemporizador, 1000);
     });
   </script>
+  
+  <script>
+    $(document).ready(function () {
+      // Inicialização do carrossel com efeitos aprimorados
+      $('.carousel').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        dots: true,
+        autoplay: true,
+        autoplaySpeed: 4000,
+        fade: true,
+        cssEase: 'linear',
+        lazyLoad: 'ondemand',
+        responsive: [
+          {
+            breakpoint: 768,
+            settings: {
+              arrows: false,
+              centerMode: true,
+              centerPadding: '40px'
+            }
+          }
+        ]
+      });
+
+      // Melhoria na visualização de imagens no modal
+      $('.carousel img').click(function () {
+        const src = $(this).attr('src');
+        $('#imageModal img').attr('src', src);
+        $('#imageModal').modal('show');
+      });
+      
+      // Feedback visual nos formulários
+      $('input, select').on('focus', function() {
+        $(this).addClass('border-primary');
+      }).on('blur', function() {
+        $(this).removeClass('border-primary');
+      });
+    });
+
+    function alterarValor(valor) {
+      let campo = document.getElementById('valorOferta');
+      let atual = parseInt(campo.value || '0');
+      atual += valor;
+      if (atual < 0) atual = 0;
+      campo.value = atual;
+    }
+
+    function atualizarTemporizador() {
+      const agora = new Date();
+      const fim = new Date("2025-05-18T12:00:00"); // Data ajustada para 18/05/2025 às 12:00
+
+      const diferenca = fim - agora;
+      const container = document.getElementById("leilaoTimer");
+
+      if (diferenca > 0) {
+        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+        const horas = String(Math.floor((diferenca / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+        const minutos = String(Math.floor((diferenca / (1000 * 60)) % 60)).padStart(2, '0');
+        const segundos = String(Math.floor((diferenca / 1000) % 60)).padStart(2, '0');
+
+        // Cálculo da porcentagem de tempo restante (assumindo que o leilão dura 30 dias)
+        const porcentagem = Math.min(100, Math.max(0, diferenca / (30 * 24 * 60 * 60 * 1000) * 100));
+        
+        container.innerHTML = `<i class="fas fa-clock"></i> Leilão em andamento: <strong>${dias} dias, ${horas}:${minutos}:${segundos}</strong>`;
+        container.className = "countdown-box countdown-ativo";
+        
+        // Adicionar animação de pulso quando estiver próximo do fim
+        if (diferenca < (24 * 60 * 60 * 1000)) { // Menos de 24 horas
+          container.classList.add("pulse-animation");
+        }
+      } else {
+        container.innerHTML = `<i class="fas fa-times-circle"></i> Leilão encerrado`;
+        container.className = "countdown-box countdown-encerrado";
+      }
+    }
+  </script>
 </body>
+
 </html>
