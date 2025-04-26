@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ello Leilões</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary-color: #f26522;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-gray: #f8f9fa;
+      --dark-gray: #343a40;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #c0392b;
+      --text-color: #333;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text-color);
+      background-color: #f9f9f9;
+      padding-bottom: 30px;
+    }
+
+    /* Header e Navegação */
+    .top-bar {
+      background-color: var(--primary-color);
+      padding: 10px 15px;
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .top-bar .login-btn {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      color: white;
+    }
+
+    .top-bar .login-btn:hover {
+      opacity: 0.9;
+    }
+
+    .top-bar img {
+      width: 20px;
+      margin-right: 8px;
+    }
+
+    .logo-container {
+      text-align: center;
+      padding: 15px 0;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      height: 70px;
+      max-width: 100%;
+      transition: var(--transition);
+    }
+
+    @media (max-width: 576px) {
+      .logo {
+        height: 50px;
+      }
+    }
+
+    /* Menu de Categorias ATUALIZADO */
+    .category-menu {
+      background-color: white;
+      padding: 15px 0;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 100;
+    }
+
+    .icon-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 10px;
+      border-radius: var(--border-radius);
+    }
+
+    .category-item:hover {
+      background-color: var(--light-gray);
+      transform: translateY(-3px);
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+
+    .category-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+      text-align: center;
+    }
+
+    /* Dropdown Menu ATUALIZADO (SÓ COM CLIQUE) */
+    .dropdown-menu {
+      min-width: 220px;
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 10px 0;
+      margin-top: 10px;
+      background-color: white;
+      position: absolute;
+      display: none;
+      z-index: 1050;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .dropdown.active .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+      transition: var(--transition);
+      background-color: white;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--light-gray);
+      color: var(--primary-color);
+    }
+
+    .dropdown-item i {
+      margin-right: 8px;
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Seções de Conteúdo */
+    .section-title {
+      position: relative;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--secondary-color);
+      text-transform: uppercase;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+
+    .info-section {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .info-section h4 {
+      color: var(--secondary-color);
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+    }
+
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      background-color: var(--light-gray);
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .info-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .info-text {
+      margin-top: 15px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Cards de Produtos */
+    .products-container {
+      padding: 0 15px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image-container {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .product-card img.product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img.product-image {
+      transform: scale(1.05);
+    }
+
+    .auction-info {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: rgba(243, 156, 18, 0.9);
+      color: white;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .auction-info i {
+      margin-right: 5px;
+    }
+
+    .product-details {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--secondary-color);
+      line-height: 1.4;
+    }
+
+    .product-subtext {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .product-subtext i {
+      margin-right: 5px;
+      color: var(--primary-color);
+    }
+
+    .price-container {
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .initial-bid {
+      font-size: 1.0rem;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      background-color: #f8f9fa;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border-left: 3px solid var(--primary-color);
+      font-weight: 600;
+    }
+
+    .market-price {
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .product-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 15px;
+      font-style: italic;
+      border-bottom: 1px dotted #ddd;
+      padding-bottom: 5px;
+    }
+
+    .company-logo {
+      max-width: 120px;
+      max-height: 40px;
+      margin-bottom: 15px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .more-info {
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .more-info:hover {
+      background-color: #e55e14;
+      color: white;
+    }
+
+    .favorite-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      margin-left: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .favorite-btn:hover {
+      background-color: #f8f9fa;
+      color: var(--accent-color);
+    }
+
+    .warning-box {
+      background-color: #fff5f5;
+      color: var(--danger-color);
+      border: 1px solid #fad7d7;
+      border-radius: var(--border-radius);
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .warning-box i {
+      margin-right: 8px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 992px) {
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .icon-bar {
+        gap: 10px;
+      }
+      
+      .nav-icon {
+        width: 35px;
+        height: 35px;
+      }
+      
+      .category-label {
+        font-size: 0.75rem;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+
+      .dropdown-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        left: auto;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .icon-bar {
+        justify-content: space-around;
+      }
+      
+      .category-item {
+        padding: 5px;
+      }
+      
+      .nav-icon {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .category-label {
+        font-size: 0.7rem;
+      }
+      
+      .product-title {
+        font-size: 1rem;
+      }
+      
+      .market-price {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Componentes Adicionais */
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 5px;
+      min-width: 50px;
+    }
+
+    .countdown-value {
+      background-color: var(--secondary-color);
+      color: white;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 5px;
+      color: #666;
+    }
+
+    .badge-featured {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    .search-bar {
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    .search-input {
+      border-radius: 30px;
+      padding: 12px 20px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-btn {
+      border-radius: 30px;
+      padding: 8px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+    }
+
+    /* Animações */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    /* Estilo para itens ocultos pela pesquisa */
+    .hidden-item {
+      display: none !important;
+    }
+    
+    /* Estilo para leilão encerrado */
+    .auction-ended {
+      background-color: rgba(201, 48, 44, 0.9) !important;
+    }
+    
+    .auction-ended-message {
+      color: var(--danger-color);
+      font-weight: 700;
+      text-align: center;
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid var(--danger-color);
+      border-radius: var(--border-radius);
+      background-color: #fff5f5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra Superior -->
+  <div class="top-bar">
+    <a href="exemplo.com" class="login-btn">
+      <img src="ctticon.png" alt="Login" /> 
+      <span>ENTRAR / CADASTRAR</span>
+    </a>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="logo.png" class="logo" alt="Ello Leilões" />
+  </div>
+
+  <!-- Menu de Categorias ATUALIZADO (CLIQUE PARA ABRIR) -->
+  <div class="category-menu">
+    <div class="container">
+      <div class="icon-bar">
+        <!-- Veículos -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="vermelho.png" class="nav-icon" alt="Veículos" />
+            <span class="category-label">VEÍCULOS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Materiais -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="amarelo.png" class="nav-icon" alt="Materiais" />
+            <span class="category-label">MATERIAIS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Imóveis -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="azul.png" class="nav-icon" alt="Imóveis" />
+            <span class="category-label">IMÓVEIS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Licitações -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="cinza.png" class="nav-icon" alt="Licitações" />
+            <span class="category-label">LICITAÇÕES</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Eletrônicos -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="preto.png" class="nav-icon" alt="Eletrônicos" />
+            <span class="category-label">ELETRÔNICOS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Pesquisa -->
+  <div class="container">
+    <div class="search-bar">
+      <div class="input-group">
+        <input type="text" class="form-control search-input" placeholder="Buscar lotes, veículos, imóveis..." aria-label="Buscar" id="search-input">
+        <button class="btn search-btn" type="button" id="search-button"><i class="fas fa-search"></i> Buscar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção Informativa -->
+  <div class="container">
+    <div class="info-section">
+      <h4>BEM-VINDO</h4>
+      <div class="info-badge">
+        <img src="aten.png" alt="Informativo" class="info-icon" />
+        <span class="info-label">Informativo</span>
+      </div>
+      <p class="info-text">
+        26º Leilão das Cooperativas de Crédito do Grupo Embracredit.<br>
+        1º Leilão do Primeiro Semestre.
+      </p>
+    </div>
+  </div>
+
+  <!-- Lotes em Destaque -->
+  <div class="container">
+    <h2 class="section-title">Lotes em Destaque</h2>
+    
+    <div class="products-container">
+      <div class="products-grid">
+        <!-- Produto 1 (Compass) -->
+        <div class="product-card" data-auction-date="2025-04-29T14:00:00">
+          <div class="product-image-container">
+            <span class="badge-featured">Destaque</span>
+            <img src="car0.png" alt="Jeep Compass" class="product-image" />
+            <div class="auction-info">
+              <i class="fas fa-gavel"></i> 29/04 14:00
+            </div>
+          </div>
+          <div class="product-details">
+            <div class="product-title">
+              FIAT UNO WAY 1.0 2015/2015
+            </div>
+            <div class="product-subtext">
+              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+            </div>
+            
+            <!-- Contador regressivo -->
+            <div class="countdown-timer">
+              <div class="countdown-item">
+                <div class="countdown-value days">00</div>
+                <div class="countdown-label">Dias</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value hours">00</div>
+                <div class="countdown-label">Horas</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value minutes">00</div>
+                <div class="countdown-label">Min</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value seconds">00</div>
+                <div class="countdown-label">Seg</div>
+              </div>
+            </div>
+            
+                        <div class="price-container">
+              <div class="initial-bid">
+                Lance Atual: <strong>R$ 9.000</strong>
+              </div>
+              <div class="market-price">
+                R$ 13.500
+              </div>
+              <div class="product-note">
+                Adjudificação Direta
+              </div>
+            </div>
+            
+            <img src="bkpan.png" alt="Empresa" class="company-logo" />
+            
+            <div class="action-buttons">
+              <a href="car283648583.html" class="more-info">Ver Detalhes</a>
+              <button class="favorite-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            
+                      <div class="warning-box">
+              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+            </div>
+          </div>
+        </div>
+        
+        <!-- Produto 2 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car2.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      VOLKSWAGEN TIGUAN 2.0 TSI 2010/2010
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 23.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 29.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car28462946483.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+        
+        <!-- Produto 3 -->
+        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
+          <div class="product-image-container">
+            <img src="car3.png" alt="Veículo" class="product-image" />
+            <div class="auction-info">
+              <i class="fas fa-gavel"></i> 29/04 15:30
+            </div>
+          </div>
+          <div class="product-details">
+            <div class="product-title">
+              FIAT UNO MILLE ECONOMY 2013/2013
+            </div>
+            <div class="product-subtext">
+              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+            </div>
+            
+            <!-- Contador regressivo -->
+            <div class="countdown-timer">
+              <div class="countdown-item">
+                <div class="countdown-value days">00</div>
+                <div class="countdown-label">Dias</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value hours">00</div>
+                <div class="countdown-label">Horas</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value minutes">00</div>
+                <div class="countdown-label">Min</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value seconds">00</div>
+                <div class="countdown-label">Seg</div>
+              </div>
+            </div>
+            
+            <div class="price-container">
+              <div class="initial-bid">
+                Lance Atual: <strong>R$ 4.500</strong>
+              </div>
+              <div class="market-price">
+                R$ 8.000
+              </div>
+              <div class="product-note">
+                Adjudificação Direta
+              </div>
+            </div>
+            
+            <img src="bkpan.png" alt="Empresa" class="company-logo" />
+            
+            <div class="action-buttons">
+              <a href="car2852946294.html" class="more-info">Ver Detalhes</a>
+              <button class="favorite-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            
+            <div class="warning-box">
+              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Produto 4 -->
+        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
+          <div class="product-image-container">
+            <img src="car4.png" alt="Veículo" class="product-image" />
+            <div class="auction-info">
+              <i class="fas fa-gavel"></i> 29/04 15:30
+            </div>
+          </div>
+          <div class="product-details">
+            <div class="product-title">
+              FIAT GRAND SIENA ESSENCE 1.6 2014/2015
+            </div>
+            <div class="product-subtext">
+              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+            </div>
+            
+            <!-- Contador regressivo -->
+            <div class="countdown-timer">
+              <div class="countdown-item">
+                <div class="countdown-value days">00</div>
+                <div class="countdown-label">Dias</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value hours">00</div>
+                <div class="countdown-label">Horas</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value minutes">00</div>
+                <div class="countdown-label">Min</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value seconds">00</div>
+                <div class="countdown-label">Seg</div>
+              </div>
+            </div>
+            
+            <div class="price-container">
+              <div class="initial-bid">
+                Lance Atual: <strong>R$ 12.500</strong>
+              </div>
+              <div class="market-price">
+                R$ 17.000
+              </div>
+              <div class="product-note">
+                Adjudificação Direta
+              </div>
+            </div>
+            
+            <img src="bkpan.png" alt="Empresa" class="company-logo" />
+            
+            <div class="action-buttons">
+              <a href="car2829573925.html" class="more-info">Ver Detalhes</a>
+              <button class="favorite-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            
+            <div class="warning-box">
+              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+  <!-- Produto 5 -->
+        <div class="product-card" data-auction-date="2025-04-29T15:30:00">
+          <div class="product-image-container">
+            <img src="car5.png" alt="Veículo" class="product-image" />
+            <div class="auction-info">
+              <i class="fas fa-gavel"></i> 29/04 15:30
+            </div>
+          </div>
+          <div class="product-details">
+            <div class="product-title">
+              HONDA CG 160 START 2018/2019
+            </div>
+            <div class="product-subtext">
+              <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+            </div>
+            
+            <!-- Contador regressivo -->
+            <div class="countdown-timer">
+              <div class="countdown-item">
+                <div class="countdown-value days">00</div>
+                <div class="countdown-label">Dias</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value hours">00</div>
+                <div class="countdown-label">Horas</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value minutes">00</div>
+                <div class="countdown-label">Min</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-value seconds">00</div>
+                <div class="countdown-label">Seg</div>
+              </div>
+            </div>
+            
+            <div class="price-container">
+              <div class="initial-bid">
+                Lance Atual: <strong>R$ 3.500</strong>
+              </div>
+              <div class="market-price">
+                R$ 8.000
+              </div>
+              <div class="product-note">
+                Adjudificação Direta
+              </div>
+            </div>
+            
+            <img src="bkpan.png" alt="Empresa" class="company-logo" />
+            
+            <div class="action-buttons">
+              <a href="car2852947495.html" class="more-info">Ver Detalhes</a>
+              <button class="favorite-btn">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            
+            <div class="warning-box">
+              <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+
+  <!-- Produto 6 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car6.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      HONDA CG 160 FAN 2023/2023
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 6.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 11.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car2853947162.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+
+  <!-- Produto 7 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car7.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      HONDA BIZ 125 120 2020/2021
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 6.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 10.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car289472610.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+
+  <!-- Produto 8 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car8.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      HONDA XRE 300 ABS 2023/2023
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Retornar lotes
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 15.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 21.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car284958716.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+
+  <!-- Produto 9 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car9.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      YAMAHA YBR150 FACTOR E 2016/2016
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 2.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 6.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car284920147.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+
+<!-- Produto 10 -->
+<div class="product-card" data-auction-date="2025-04-29T15:30:00">
+  <div class="product-image-container">
+    <img src="car10.png" alt="Veículo" class="product-image" />
+    <div class="auction-info">
+      <i class="fas fa-gavel"></i> 29/04 15:30
+    </div>
+  </div>
+  <div class="product-details">
+    <div class="product-title">
+      FIAT PULSE ABARTH 270 2023/2023
+    </div>
+    <div class="product-subtext">
+      <i class="fas fa-map-marker-alt"></i> Encontra-se no pátio da J&J Leilões
+    </div>
+    
+    <!-- Contador regressivo -->
+    <div class="countdown-timer">
+      <div class="countdown-item">
+        <div class="countdown-value days">00</div>
+        <div class="countdown-label">Dias</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value hours">00</div>
+        <div class="countdown-label">Horas</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value minutes">00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-value seconds">00</div>
+        <div class="countdown-label">Seg</div>
+      </div>
+    </div>
+    
+    <div class="price-container">
+      <div class="initial-bid">
+        Lance Atual: <strong>R$ 63.000</strong>
+      </div>
+      <div class="market-price">
+        R$ 80.000
+      </div>
+      <div class="product-note">
+        Adjudicação Direta
+      </div>
+    </div>
+    
+    <img src="bkpan.png" alt="Empresa" class="company-logo" />
+    
+    <div class="action-buttons">
+      <a href="car284957391.html" class="more-info">Ver Detalhes</a>
+      <button class="favorite-btn">
+        <i class="far fa-heart"></i>
+      </button>
+    </div>
+    
+    <div class="warning-box">
+      <i class="fas fa-exclamation-triangle"></i> É NECESSÁRIO INDICAÇÃO OU LICENÇA PARA OFERTAR
+    </div>
+  </div>
+</div>
+  
+    <!-- Botão Ver Mais -->
+    <div class="text-center mt-4">
+      <a href="todos-lotes.html" class="btn btn-outline-primary">Ver Todos os Lotes</a>
+    </div>
+  </div>
+
+  <!-- Próximos Leilões -->
+  <div class="container mt-5">
+    <h2 class="section-title">Próximos Leilões</h2>
+    
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Leilão de Veículos Premium</h5>
+            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 21/04/2025 - 14:00</p>
+            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
+            <p class="card-text">Mais de 50 veículos de luxo com lances iniciais a partir de R$ 15.000.</p>
+            <a href="exemplo4.html" class="btn btn-sm btn-primary">Saiba Mais</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Leilão de Imóveis Residenciais</h5>
+            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 25/08/2023 - 10:00</p>
+            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
+            <p class="card-text">Apartamentos e casas em diversas regiões com descontos de até 40%.</p>
+            <a href="exemplo5.html" class="btn btn-sm btn-primary">Saiba Mais</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Leilão de Equipamentos Eletrônicos</h5>
+            <p class="card-text"><i class="far fa-calendar-alt me-2"></i> 28/08/2023 - 15:30</p>
+            <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i> Online</p>
+            <p class="card-text">Notebooks, smartphones e outros equipamentos com ótimos preços.</p>
+            <a href="exemplo6.html" class="btn btn-sm btn-primary">Saiba Mais</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer class="bg-dark text-white mt-5 py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <h5>Ello Leilões</h5>
+          <p class="small">Especialistas em leilões extrajudiciais e judiciais desde 2010.</p>
+          <p class="small">CNPJ: 00.000.000/0001-00</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h5>Links Úteis</h5>
+          <ul class="list-unstyled">
+            <li><a href="exemplo.html" class="text-white">Como Participar</a></li>
+            <li><a href="exemplo.html" class="text-white">Termos e Condições</a></li>
+            <li><a href="exemplo.html" class="text-white">Política de Privacidade</a></li>
+            <li><a href="exemplo.html" class="text-white">Contato</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Contato</h5>
+          <p class="small"><i class="fas fa-phone me-2"></i> (11) 0000-0000</p>
+          <p class="small"><i class="fas fa-envelope me-2"></i> contato@elloleiloes.com.br</p>
+        </div>
+      </div>
+      <hr class="my-3">
+      <div class="text-center small">
+        &copy; 2023 Ello Leilões. Todos os direitos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Função para alternar o dropdown
+    function toggleDropdown(element) {
+      // Fecha todos os outros dropdowns primeiro
+      document.querySelectorAll('.dropdown').forEach(drop => {
+        if (drop !== element) {
+          drop.classList.remove('active');
+        }
+      });
+      
+      // Alterna o estado do dropdown clicado
+      element.classList.toggle('active');
+      
+      // Fecha o dropdown se clicar fora
+      if (element.classList.contains('active')) {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!element.contains(e.target)) {
+            element.classList.remove('active');
+            document.removeEventListener('click', closeDropdown);
+          }
+        });
+      }
+    }
+
+    // Script para contador regressivo
+    document.addEventListener('DOMContentLoaded', function() {
+      // Função para calcular o tempo restante
+      function getTimeRemaining(endtime) {
+        const total = Date.parse(endtime) - Date.parse(new Date());
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(total / (1000 * 60 * 60 * 24));
+        
+        return {
+          total,
+          days,
+          hours,
+          minutes,
+          seconds
+        };
+      }
+      
+      // Função para inicializar o relógio
+      function initializeClock(productCard) {
+        const auctionDateStr = productCard.getAttribute('data-auction-date');
+        const auctionDate = new Date(auctionDateStr);
+        
+        const daysSpan = productCard.querySelector('.days');
+        const hoursSpan = productCard.querySelector('.hours');
+        const minutesSpan = productCard.querySelector('.minutes');
+        const secondsSpan = productCard.querySelector('.seconds');
+        const auctionInfo = productCard.querySelector('.auction-info');
+        const countdownTimer = productCard.querySelector('.countdown-timer');
+        
+        // Verificar se o leilão já terminou
+        const now = new Date();
+        if (auctionDate <= now) {
+          // Leilão encerrado
+          if (auctionInfo) {
+            auctionInfo.classList.add('auction-ended');
+            auctionInfo.innerHTML = '<i class="fas fa-gavel"></i> Encerrado';
+          }
+          
+          if (countdownTimer) {
+            countdownTimer.innerHTML = '<div class="auction-ended-message">Leilão Encerrado</div>';
+          }
+          return;
+        }
+        
+        function updateClock() {
+          const t = getTimeRemaining(auctionDate);
+          
+          if (daysSpan) daysSpan.innerHTML = t.days < 10 ? '0' + t.days : t.days;
+          if (hoursSpan) hoursSpan.innerHTML = t.hours < 10 ? '0' + t.hours : t.hours;
+          if (minutesSpan) minutesSpan.innerHTML = t.minutes < 10 ? '0' + t.minutes : t.minutes;
+          if (secondsSpan) secondsSpan.innerHTML = t.seconds < 10 ? '0' + t.seconds : t.seconds;
+          
+          if (t.total <= 0) {
+            clearInterval(timeinterval);
+            
+            // Leilão encerrado
+            if (auctionInfo) {
+              auctionInfo.classList.add('auction-ended');
+              auctionInfo.innerHTML = '<i class="fas fa-gavel"></i> Encerrado';
+            }
+            
+            if (countdownTimer) {
+              countdownTimer.innerHTML = '<div class="auction-ended-message">Leilão Encerrado</div>';
+            }
+          }
+        }
+        
+        updateClock(); // Executar uma vez imediatamente
+        const timeinterval = setInterval(updateClock, 1000);
+        productCard.setAttribute('data-interval-id', timeinterval); // Armazenar o ID do intervalo
+      }
+      
+      // Inicializar todos os contadores regressivos
+      const productCards = document.querySelectorAll('.product-card[data-auction-date]');
+      productCards.forEach(function(card) {
+        initializeClock(card);
+      });
+    });
+    
+    // Script para favoritar
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('far')) {
+          icon.classList.remove('far');
+          icon.classList.add('fas');
+          icon.style.color = '#e74c3c';
+        } else {
+          icon.classList.remove('fas');
+          icon.classList.add('far');
+          icon.style.color = '';
+        }
+      });
+    });
+    
+    // Script para funcionalidade de pesquisa
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchButton = document.getElementById('search-button');
+      const searchInput = document.getElementById('search-input');
+      
+      if (searchButton && searchInput) {
+        searchButton.addEventListener('click', function() {
+          const searchTerm = searchInput.value.trim().toLowerCase();
+          if (searchTerm) {
+            // Seleciona todos os elementos que podem ser pesquisados
+            const searchableItems = document.querySelectorAll('.product-card');
+            let resultsFound = false;
+            
+            searchableItems.forEach(item => {
+              // Busca no texto do item
+              const itemText = item.textContent.toLowerCase();
+              
+              if (itemText.includes(searchTerm)) {
+                item.classList.remove('hidden-item');
+                resultsFound = true;
+              } else {
+                item.classList.add('hidden-item');
+              }
+            });
+            
+            // Se não encontrou resultados, pode mostrar uma mensagem
+            if (!resultsFound) {
+              alert('Nenhum resultado encontrado para: ' + searchTerm);
+            }
+          } else {
+            // Se a pesquisa estiver vazia, mostrar todos os itens
+            const searchableItems = document.querySelectorAll('.product-card');
+            searchableItems.forEach(item => {
+              item.classList.remove('hidden-item');
+            });
+          }
+        });
+        
+        // Permitir pesquisa ao pressionar Enter
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            searchButton.click();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
