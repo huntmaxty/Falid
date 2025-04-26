@@ -1034,32 +1034,62 @@
     
     // Função para calcular frete
     function calcularFrete() {
-      const valorProduto = parseFloat(document.getElementById('valorProduto').value || 0);
-      const cidade = document.getElementById('cidadeDestino').value;
-      const estado = document.getElementById('estadoDestino').value;
-      const resultadoDiv = document.getElementById('resultadoFrete');
-      
-      if (!valorProduto || !cidade || !estado) {
-        resultadoDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Por favor, preencha todos os campos.';
-        resultadoDiv.classList.remove('d-none', 'alert-success');
-        resultadoDiv.classList.add('alert-danger');
+      const valor = parseFloat(document.getElementById("valorProduto").value);
+      const cidade = document.getElementById("cidadeDestino").value;
+      const estado = document.getElementById("estadoDestino").value;
+      const resultado = document.getElementById("resultadoFrete");
+
+      if (isNaN(valor) || !estado || !cidade) {
+        resultado.innerHTML = "<i class='fas fa-exclamation-circle'></i> Preencha todos os campos corretamente.";
+        resultado.classList.remove("d-none", "alert-success");
+        resultado.classList.add("alert-danger");
         return;
       }
+
+      // Mostrar indicador de carregamento
+      resultado.innerHTML = "<div class='text-center'><span class='spinner-border spinner-border-sm' role='status'></span> Calculando...</div>";
+      resultado.classList.remove("d-none", "alert-danger", "alert-success");
       
-      // Cálculo do frete (3.5% do valor do produto)
-      const valorFrete = valorProduto * 0.035;
-      
-      // Valor mínimo de frete
-      const freteMinimo = 50;
-      const freteMaximo = 1000;
-      
-      let freteFinal = valorFrete;
-      if (valorFrete < freteMinimo) freteFinal = freteMinimo;
-      if (valorFrete > freteMaximo) freteFinal = freteMaximo;
-      
-      resultadoDiv.innerHTML = `<i class="fas fa-check-circle"></i> Frete para ${cidade}/${estado}: <strong>R$ ${freteFinal.toFixed(2)}</strong>`;
-      resultadoDiv.classList.remove('d-none', 'alert-danger');
-      resultadoDiv.classList.add('alert-success');
+      // Simular tempo de processamento
+      setTimeout(function() {
+        let freteBase = valor >= 25000 ? valor * 0.045 : 1000;
+
+        const acrescimos = {
+          "norte": 0.005,
+          "sul": 0.01,
+          "sudeste": 0.012,
+          "nordeste": 0.007,
+          "centro-oeste": 0.019
+        };
+
+        freteBase += freteBase * acrescimos[estado];
+        
+        // Adicionar variação baseada no comprimento do nome da cidade (simulação)
+        const variacaoCidade = (cidade.length % 5) * 0.001;
+        freteBase = freteBase * (1 + variacaoCidade);
+        
+        const valorFormatado = freteBase.toFixed(2).replace(".", ",");
+        const prazoEntrega = 3 + (estado === "norte" || estado === "nordeste" ? 2 : 0);
+        
+        resultado.innerHTML = `
+          <div class="text-center mb-2"><i class="fas fa-check-circle text-success fa-2x"></i></div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Valor do frete:</span>
+            <strong>R$ ${valorFormatado}</strong>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Prazo de entrega:</span>
+            <strong>${prazoEntrega} a ${prazoEntrega + 2} dias úteis</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Cidade/Estado:</span>
+            <strong>${cidade}/${estado.toUpperCase()}</strong>
+          </div>
+        `;
+        resultado.classList.remove("d-none", "alert-danger");
+        resultado.classList.add("alert-success");
+      }, 1500);
+    }
       
       // Salvar cálculo no Firebase
       try {
