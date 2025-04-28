@@ -508,7 +508,7 @@
       }
     }
 
-    @media (min-width: 1200px) {
+        @media (min-width: 1200px) {
       .container {
         max-width: 1140px;
       }
@@ -525,17 +525,6 @@
 
   <div class="container">
     <div class="carousel-container">
-      <div class="carousel">
-        
-      </div>
-    </div>
-
-    <!-- Temporizador -->
-    <div class="countdown-box" id="leilaoTimer"></div>
-
-    <!-- Lance Atual -->
-    <div class="lance-atual">
-      <i class="fas fa-gavel"></i> Lance atual ="carousel-container">
       <div class="carousel">
         <div><img src="11song1.png" alt="Imagem 1" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
 <div><img src="11song2.png" alt="Imagem 2" data-bs-toggle="modal" data-bs-target="#imageModal"></div>
@@ -558,13 +547,22 @@
     </div>
 
     <!-- Temporizador -->
-    <diva-bs-toggle="modal" data-bs-target="#lanceModal">
+    <div class="countdown-box" id="leilaoTimer"></div>
+
+    <!-- Lance Atual -->
+    <div class="lance-atual">
+      <i class="fas fa-gavel"></i> Lance atual atualizado: <span>R$ 2.000,00</span>
+    </div>
+
+    <div class="btn-actions">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#lanceModal">
         <i class="fas fa-gavel"></i> Ofertar Lance
       </button>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adjModal">
         <i class="fas fa-money-bill-wave"></i> Pagar Adjudicação
       </button>
     </div>
+    
 
     <!-- Preço e Frete -->
 <div class="price-container">
