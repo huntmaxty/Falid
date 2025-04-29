@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ello Leilões</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary-color: #f26522;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-gray: #f8f9fa;
+      --dark-gray: #343a40;
+      --success-color: #27ae60;
+      --warning-color: #f39c12;
+      --danger-color: #c0392b;
+      --text-color: #333;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text-color);
+      background-color: #f9f9f9;
+      padding-bottom: 30px;
+    }
+
+    /* Header e Navegação */
+    .top-bar {
+      background-color: var(--primary-color);
+      padding: 10px 15px;
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .top-bar .login-btn {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      color: white;
+    }
+
+    .top-bar .login-btn:hover {
+      opacity: 0.9;
+    }
+
+    .top-bar img {
+      width: 20px;
+      margin-right: 8px;
+    }
+
+    .logo-container {
+      text-align: center;
+      padding: 15px 0;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      height: 70px;
+      max-width: 100%;
+      transition: var(--transition);
+    }
+
+    @media (max-width: 576px) {
+      .logo {
+        height: 50px;
+      }
+    }
+
+    /* Menu de Categorias ATUALIZADO */
+    .category-menu {
+      background-color: white;
+      padding: 15px 0;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative;
+      z-index: 100;
+    }
+
+    .icon-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 10px;
+      border-radius: var(--border-radius);
+    }
+
+    .category-item:hover {
+      background-color: var(--light-gray);
+      transform: translateY(-3px);
+    }
+
+    .nav-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+
+    .category-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+      text-align: center;
+    }
+
+    /* Dropdown Menu ATUALIZADO (SÓ COM CLIQUE) */
+    .dropdown-menu {
+      min-width: 220px;
+      border: none;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 10px 0;
+      margin-top: 10px;
+      background-color: white;
+      position: absolute;
+      display: none;
+      z-index: 1050;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .dropdown.active .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+      transition: var(--transition);
+      background-color: white;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--light-gray);
+      color: var(--primary-color);
+    }
+
+    .dropdown-item i {
+      margin-right: 8px;
+      width: 16px;
+      text-align: center;
+    }
+
+    /* Seções de Conteúdo */
+    .section-title {
+      position: relative;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--secondary-color);
+      text-transform: uppercase;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background-color: var(--primary-color);
+    }
+
+    .info-section {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .info-section h4 {
+      color: var(--secondary-color);
+      font-weight: 700;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+    }
+
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      background-color: var(--light-gray);
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .info-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+    }
+
+    .info-text {
+      margin-top: 15px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* Cards de Produtos */
+    .products-container {
+      padding: 0 15px;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image-container {
+      position: relative;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .product-card img.product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover img.product-image {
+      transform: scale(1.05);
+    }
+
+    .auction-info {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: rgba(243, 156, 18, 0.9);
+      color: white;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .auction-info i {
+      margin-right: 5px;
+    }
+
+    .product-details {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--secondary-color);
+      line-height: 1.4;
+    }
+
+    .product-subtext {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .product-subtext i {
+      margin-right: 5px;
+      color: var(--primary-color);
+    }
+
+    .price-container {
+      margin-top: auto;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .initial-bid {
+      font-size: 1.0rem;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      background-color: #f8f9fa;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border-left: 3px solid var(--primary-color);
+      font-weight: 600;
+    }
+
+    .market-price {
+      color: var(--accent-color);
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .product-note {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 15px;
+      font-style: italic;
+      border-bottom: 1px dotted #ddd;
+      padding-bottom: 5px;
+    }
+
+    .company-logo {
+      max-width: 120px;
+      max-height: 40px;
+      margin-bottom: 15px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .more-info {
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .more-info:hover {
+      background-color: #e55e14;
+      color: white;
+    }
+
+    .favorite-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      margin-left: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .favorite-btn:hover {
+      background-color: #f8f9fa;
+      color: var(--accent-color);
+    }
+
+    .warning-box {
+      background-color: #fff5f5;
+      color: var(--danger-color);
+      border: 1px solid #fad7d7;
+      border-radius: var(--border-radius);
+      padding: 10px;
+      text-align: center;
+      font-weight: 600;
+      margin-top: 15px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .warning-box i {
+      margin-right: 8px;
+    }
+
+    /* Mensagem de Indisponibilidade */
+    .no-lots-message {
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    .no-lots-emoji {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .no-lots-text {
+      font-size: 1.2rem;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+    }
+
+    .no-lots-subtext {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Responsividade */
+    @media (max-width: 992px) {
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .icon-bar {
+        gap: 10px;
+      }
+      
+      .nav-icon {
+        width: 35px;
+        height: 35px;
+      }
+      
+      .category-label {
+        font-size: 0.75rem;
+      }
+      
+      .section-title {
+        font-size: 1.3rem;
+      }
+
+      .dropdown-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        left: auto;
+        transform: none;
+      }
+      
+      .no-lots-emoji {
+        font-size: 2.5rem;
+      }
+      
+      .no-lots-text {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .icon-bar {
+        justify-content: space-around;
+      }
+      
+      .category-item {
+        padding: 5px;
+      }
+      
+      .nav-icon {
+        width: 30px;
+        height: 30px;
+      }
+      
+      .category-label {
+        font-size: 0.7rem;
+      }
+      
+      .product-title {
+        font-size: 1rem;
+      }
+      
+      .market-price {
+        font-size: 1.2rem;
+      }
+      
+      .no-lots-emoji {
+        font-size: 2rem;
+      }
+      
+      .no-lots-text {
+        font-size: 1rem;
+      }
+    }
+
+    /* Componentes Adicionais */
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 5px;
+      min-width: 50px;
+    }
+
+    .countdown-value {
+      background-color: var(--secondary-color);
+      color: white;
+      border-radius: 5px;
+      padding: 5px 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-size: 0.7rem;
+      margin-top: 5px;
+      color: #666;
+    }
+
+    .badge-featured {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--accent-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    .search-bar {
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    .search-input {
+      border-radius: 30px;
+      padding: 12px 20px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-btn {
+      border-radius: 30px;
+      padding: 8px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+    }
+
+    /* Animações */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+    
+    /* Estilo para itens ocultos pela pesquisa */
+    .hidden-item {
+      display: none !important;
+    }
+    
+    /* Estilo para leilão encerrado */
+    .auction-ended {
+      background-color: rgba(201, 48, 44, 0.9) !important;
+    }
+    
+    .auction-ended-message {
+      color: var(--danger-color);
+      font-weight: 700;
+      text-align: center;
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid var(--danger-color);
+      border-radius: var(--border-radius);
+      background-color: #fff5f5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra Superior -->
+  <div class="top-bar">
+    <a href="exemplo.com" class="login-btn">
+      <img src="ctticon.png" alt="Login" /> 
+      <span>ENTRAR / CADASTRAR</span>
+    </a>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="logo.png" class="logo" alt="Ello Leilões" />
+  </div>
+
+  <!-- Menu de Categorias ATUALIZADO (CLIQUE PARA ABRIR) -->
+  <div class="category-menu">
+    <div class="container">
+      <div class="icon-bar">
+        <!-- Veículos -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="vermelho.png" class="nav-icon" alt="Veículos" />
+            <span class="category-label">VEÍCULOS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Materiais -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="amarelo.png" class="nav-icon" alt="Materiais" />
+            <span class="category-label">MATERIAIS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Imóveis -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="azul.png" class="nav-icon" alt="Imóveis" />
+            <span class="category-label">IMÓVEIS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Licitações -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="cinza.png" class="nav-icon" alt="Licitações" />
+            <span class="category-label">LICITAÇÕES</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+
+        <!-- Eletrônicos -->
+        <div class="dropdown category-item" onclick="toggleDropdown(this)">
+          <div class="dropdown-toggle">
+            <img src="preto.png" class="nav-icon" alt="Eletrônicos" />
+            <span class="category-label">ELETRÔNICOS</span>
+          </div>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="Lotes em Destaque.html"><i class="fas fa-star"></i> Lotes em Destaque</a>
+            <a class="dropdown-item" href="Agenda de Leilões.html"><i class="fas fa-calendar-alt"></i> Agenda de Leilões</a>
+            <a class="dropdown-item" href="Listagem de Lotes.html"><i class="fas fa-list"></i> Listagem de Lotes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Pesquisa -->
+  <div class="container">
+    <div class="search-bar">
+      <div class="input-group">
+        <input type="text" class="form-control search-input" placeholder="Buscar lotes, veículos, imóveis..." aria-label="Buscar" id="search-input">
+        <button class="btn search-btn" type="button" id="search-button"><i class="fas fa-search"></i> Buscar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- LISTAGEM DE LOTES (Modificado com mensagem de indisponibilidade) -->
+  <div class="container">
+    <h2 class="section-title">Lotes em Destaque</h2>
+    
+    <div class="no-lots-message">
+      <span class="no-lots-emoji">😢</span>
+      <div class="no-lots-text">Não há lotes disponíveis no momento</div>
+      <div class="no-lots-subtext">
+        Estamos preparando novos lotes para você. Por favor, volte em breve para conferir as novidades ou cadastre-se para receber notificações quando novos lotes estiverem disponíveis.
+      </div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    // Função para alternar o dropdown
+    function toggleDropdown(element) {
+      // Fecha todos os dropdowns ativos
+      document.querySelectorAll('.dropdown.active').forEach(function(dropdown) {
+        if (dropdown !== element) {
+          dropdown.classList.remove('active');
+        }
+      });
+      
+      // Alterna o estado do dropdown clicado
+      element.classList.toggle('active');
+      
+      // Fecha o dropdown se clicar fora
+      if (element.classList.contains('active')) {
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!element.contains(e.target)) {
+            element.classList.remove('active');
+            document.removeEventListener('click', closeDropdown);
+          }
+        });
+      }
+    }
+
+    // Script para funcionalidade de pesquisa
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchButton = document.getElementById('search-button');
+      const searchInput = document.getElementById('search-input');
+      
+      if (searchButton && searchInput) {
+        searchButton.addEventListener('click', function() {
+          const searchTerm = searchInput.value.trim().toLowerCase();
+          if (searchTerm) {
+            // Seleciona todos os elementos que podem ser pesquisados
+            const searchableItems = document.querySelectorAll('.card');
+            let resultsFound = false;
+            
+            searchableItems.forEach(item => {
+              // Busca no texto do item
+              const itemText = item.textContent.toLowerCase();
+              
+              if (itemText.includes(searchTerm)) {
+                item.classList.remove('hidden-item');
+                resultsFound = true;
+              } else {
+                item.classList.add('hidden-item');
+              }
+            });
+            
+            // Se não encontrou resultados, pode mostrar uma mensagem
+            if (!resultsFound) {
+              alert('Nenhum resultado encontrado para: ' + searchTerm);
+            }
+          } else {
+            // Se a pesquisa estiver vazia, mostrar todos os itens
+            const searchableItems = document.querySelectorAll('.card');
+            searchableItems.forEach(item => {
+              item.classList.remove('hidden-item');
+            });
+          }
+        });
+        
+        // Permitir pesquisa ao pressionar Enter
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            searchButton.click();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
